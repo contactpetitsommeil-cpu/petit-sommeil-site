@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import Logo from '../components/Logo.astro';
+---
+<Base title="Page introuvable" description="Cette page n’existe pas ou plus. Retrouve les accompagnements, les tarifs et le questionnaire depuis l’accueil." noindex>
+  <section class="nf">
+    <div class="container inner">
+      <div class="lune" aria-hidden="true"><Logo variant="badge" size={160} /></div>
+      <p class="eyebrow">Erreur 404</p>
+      <h1>Cette page s’est endormie</h1>
+      <p class="lead">Le lien que tu as suivi ne mène nulle part. Rien de grave&nbsp;: voici par où reprendre.</p>
+      <div class="actions">
+        <Button href="/" variant="primary">Retour à l’accueil</Button>
+        <Button href="/questionnaire" variant="gold">Démarrer le questionnaire</Button>
+      </div>
+      <p class="liens">
+        Ou directement : <a href="/accompagnements">les accompagnements</a>, <a href="/tarifs">les tarifs</a>,
+        <a href="/faq">les questions fréquentes</a> ou <a href="/contact">m’écrire</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { padding: 72px 0 var(--section-y); }
+  .inner { max-width: 620px; text-align: center; }
+  .lune { width: 160px; margin: 0 auto 28px; }
+  .eyebrow { }
+  h1 { margin-bottom: 14px; }
+  .lead { color: var(--text-body); margin-bottom: 32px; }
+  .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+  .liens { font-size: var(--fs-sm); color: var(--text-body); margin: 0; }
+  .liens a { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 480px) { .actions { flex-direction: column; } }
+</style>

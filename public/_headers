@@ -1,0 +1,19 @@
+# En-têtes HTTP Netlify. Ce fichier est copié dans dist/, donc il s'applique
+# aussi bien au déploiement par glisser-déposer qu'au déploiement par Git.
+# (netlify.toml, lui, n'est lu que s'il est à la racine du dossier déployé.)
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  # ⚠️ TEMPORAIRE, LIGNE À SUPPRIMER À LA MISE EN LIGNE SUR petitsommeil.fr.
+  # Empêche Google d'indexer la démo .netlify.app.
+  X-Robots-Tag: noindex, nofollow
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/planning/*
+  Cache-Control: public, max-age=86400
+  Content-Disposition: attachment

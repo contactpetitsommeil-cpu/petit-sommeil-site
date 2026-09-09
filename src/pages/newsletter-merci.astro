@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+<Base title="Inscription confirmée" description="Ton inscription aux conseils Petit Sommeil est enregistrée." noindex>
+  <section class="merci">
+    <div class="container inner">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg>
+      </span>
+      <h1>C’est noté</h1>
+      <p class="lead">Tu recevras un email à chaque nouvel article. Pas plus, et tu peux te désinscrire en un clic.</p>
+      <div class="actions">
+        <Button href="/blog" variant="primary">Lire les articles</Button>
+        <Button href="/" variant="secondary">Retour à l’accueil</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .merci { padding: 96px 0 var(--section-y); }
+  .inner { max-width: 620px; text-align: center; }
+  .mark { width: 76px; height: 76px; border-radius: 50%; margin: 0 auto 28px; display: flex; align-items: center; justify-content: center; background: var(--cream-100); border: 1.5px solid var(--gold-400); color: var(--gold-600); }
+  .mark svg { width: 34px; height: 34px; }
+  h1 { margin-bottom: 14px; }
+  .lead { color: var(--text-body); margin-bottom: 32px; }
+  .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  @media (max-width: 480px) { .actions { flex-direction: column; } }
+</style>

@@ -1,0 +1,27 @@
+---
+import Button from './Button.astro';
+import { site } from '../data/site';
+interface Props { title?: string; text?: string; cta?: string; href?: string }
+const { title = 'Envie de retrouver des nuits plus sereines ?', text = 'Tout commence par le questionnaire. Je te réponds sous 48h.', cta = 'Démarrer le questionnaire', href = '/questionnaire' } = Astro.props;
+---
+<section class="band on-dark" aria-labelledby="cta-title">
+  <div class="container inner">
+    <div>
+      <h2 id="cta-title">{title}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="action">
+      <Button href={href} variant="gold" size="lg">{cta}</Button>
+      <span class="reassure">{site.reassurance}</span>
+    </div>
+  </div>
+</section>
+<style>
+  .band { background: var(--navy-900); color: var(--text-on-dark); padding: 64px 0; }
+  .inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+  h2 { color: var(--text-on-dark); margin-bottom: 10px; }
+  p { color: var(--text-on-dark-muted); margin: 0; max-width: 480px; }
+  .action { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; flex-shrink: 0; }
+  .reassure { font-size: var(--fs-xs); color: var(--text-on-dark-muted); }
+  @media (max-width: 720px) { .inner { flex-direction: column; align-items: stretch; } .action { align-items: stretch; } .reassure { text-align: center; } }
+</style>

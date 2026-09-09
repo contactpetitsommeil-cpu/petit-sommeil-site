@@ -1,0 +1,76 @@
+---
+import type { Field } from '../data/questionnaire';
+interface Props { field: Field }
+const { field } = Astro.props;
+const id = `f-${field.key.replace('.', '-')}`;
+const hintId = field.hint ? `${id}-hint` : undefined;
+const LIEN = 'politique de confidentialité';
+const [avantLien, apresLien] = field.label.split(LIEN);
+const tpl = field.label.includes('{prenom}') ? field.label : undefined;
+const shown = field.label.replace('{prenom}', 'ton enfant');
+---
+{field.type === 'consent' ? (
+  <div class="consent">
+    <input type="checkbox" id={id} name={field.key} value="oui" />
+    <label for={id}>{avantLien}<a href={field.href}>{LIEN}</a>{apresLien}</label>
+  </div>
+) : (
+  <div class="fld">
+    <label for={id}>
+      <span class="lbl" data-tpl={tpl}>{shown}</span>
+      {field.hint && <span class="hint" id={hintId}>{field.hint}</span>}
+    </label>
+
+    {field.type === 'textarea' && (
+      <textarea id={id} name={field.key} rows={field.rows ?? 3} placeholder={field.placeholder} aria-describedby={hintId}></textarea>
+    )}
+    {field.type === 'select' && (
+      <select id={id} name={field.key} aria-describedby={hintId}>
+        {field.options.map((o, i) => {
+          const label = typeof o === 'string' ? o : o.label;
+          return <option value={i === 0 ? '' : label}>{label}</option>;
+        })}
+      </select>
+    )}
+    {(field.type === 'text' || field.type === 'email' || field.type === 'tel' || field.type === 'date') && (
+      <input type={field.type} id={id} name={field.key} placeholder={field.placeholder} aria-describedby={hintId}
+        max={field.type === 'date' ? new Date().toISOString().slice(0, 10) : undefined}
+        autocomplete={field.key === 'email' ? 'email' : field.key === 'phone' ? 'tel' : field.key === 'parentName' ? 'given-name' : field.key === 'birthDate' ? 'bday' : 'off'} />
+    )}
+  </div>
+)}
+
+<style>
+  .fld { margin: 0 0 30px; }
+  label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  .lbl { font-weight: var(--fw-bold); color: var(--text-strong); font-size: 17px; }
+  .hint { font-size: var(--fs-sm); color: var(--text-muted); }
+
+  input, textarea, select {
+    width: 100%; padding: 14px 16px; min-height: 52px;
+    background: var(--surface-card); color: var(--text-body);
+    border: 1.5px solid var(--border); border-radius: var(--radius-md);
+    font-size: 16px; /* évite le zoom iOS */
+    transition: border-color var(--dur-base) var(--ease-soft);
+  }
+  textarea { resize: vertical; line-height: 1.55; }
+  input::placeholder, textarea::placeholder { color: var(--ink-300); }
+  input:hover, textarea:hover, select:hover { border-color: var(--border-strong); }
+  input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: 3px solid var(--focus-ring); outline-offset: 2px; border-color: var(--gold-500);
+  }
+  select {
+    appearance: none; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--gold-600) 50%), linear-gradient(135deg, var(--gold-600) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 23px, calc(100% - 14px) 23px;
+    background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
+  }
+
+  .consent { display: flex; gap: 12px; align-items: flex-start; margin: 4px 0 8px; }
+  .consent input {
+    width: 22px; height: 22px; min-height: 0; flex-shrink: 0; margin-top: 2px; padding: 0;
+    accent-color: var(--gold-600); cursor: pointer;
+  }
+  .consent label { display: block; margin: 0; font-size: var(--fs-sm); line-height: 1.5; cursor: pointer; }
+  .consent a { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; }
+</style>

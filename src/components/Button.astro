@@ -1,0 +1,50 @@
+---
+/** Bouton Petit Sommeil. Rend un <a> si `href`, sinon un <button>. */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'gold';
+  size?: 'sm' | 'md' | 'lg';
+  type?: 'button' | 'submit';
+  fullWidth?: boolean;
+  disabled?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, variant = 'primary', size = 'md', type = 'button', fullWidth = false, disabled = false, class: cls, ...rest } = Astro.props;
+const Tag = href ? 'a' : 'button';
+const classes = ['btn', variant, size, fullWidth && 'full', cls];
+---
+<Tag href={href} type={href ? undefined : type} disabled={href ? undefined : disabled} aria-disabled={href && disabled ? 'true' : undefined} class:list={classes} {...rest}>
+  <slot name="icon" />
+  <span><slot /></span>
+  <slot name="icon-right" />
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: var(--font-sans); font-weight: var(--fw-bold); line-height: 1; letter-spacing: 0.01em;
+    border-radius: var(--radius-md); border: 1px solid transparent; cursor: pointer; text-decoration: none;
+    transition: transform var(--dur-base) var(--ease-soft), background var(--dur-base) var(--ease-soft), box-shadow var(--dur-base) var(--ease-soft), border-color var(--dur-base) var(--ease-soft);
+    min-height: 44px; /* cible tactile */
+  }
+  .btn :global(svg) { width: 1.1em; height: 1.1em; }
+  .sm { padding: 9px 18px; font-size: 14px; gap: 8px; }
+  .md { padding: 14px 26px; font-size: 15px; }
+  .lg { padding: 17px 32px; font-size: 16px; }
+  .full { width: 100%; }
+
+  .primary { background: var(--navy-900); color: var(--text-on-dark); border-color: var(--navy-900); box-shadow: var(--shadow-sm); }
+  .primary:hover { background: var(--navy-800); }
+  .secondary { background: var(--surface-card); color: var(--text-strong); border-color: var(--border-strong); border-radius: var(--radius-pill); box-shadow: var(--shadow-xs); }
+  .secondary:hover { border-color: var(--gold-400); }
+  .ghost { background: transparent; color: var(--text-strong); box-shadow: none; }
+  .ghost:hover { background: var(--surface-inset); }
+  .gold { background: var(--gold-500); color: var(--navy-900); border-color: var(--gold-500); box-shadow: var(--shadow-sm); }
+  .gold:hover { background: var(--gold-400); }
+
+  .btn:not(.ghost):hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .btn:disabled, .btn[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; pointer-events: none; }
+
+  @media (max-width: 480px) { .btn { width: 100%; } }
+</style>

@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+<Base
+  title="Merci, ton questionnaire m’est bien parvenu"
+  description="Ton questionnaire a bien été transmis à Sarah. Réponse par email sous 48h pour fixer ta consultation."
+  noindex
+>
+  <section class="merci">
+    <div class="container inner">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg>
+      </span>
+
+      <h1 data-merci-title>Merci&nbsp;!</h1>
+      <p class="lead" data-merci-text>
+        Ton questionnaire m’a bien été transmis. Je l’étudie avec attention et je reviens vers toi <strong>sous 48h</strong> par email pour fixer ta consultation.
+      </p>
+
+      <div class="actions">
+        <Button href="/" variant="primary">Retour à l’accueil</Button>
+        <Button href="/accompagnements" variant="secondary">Voir les accompagnements</Button>
+      </div>
+      <p class="sig">Doucement, pas à pas, vers des nuits plus sereines.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .merci { padding: 96px 0 var(--section-y); }
+  .inner { max-width: 620px; text-align: center; }
+  .mark {
+    width: 76px; height: 76px; border-radius: 50%; margin: 0 auto 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--cream-100); border: 1.5px solid var(--gold-400); color: var(--gold-600);
+  }
+  .mark svg { width: 34px; height: 34px; }
+  h1 { margin-bottom: 14px; }
+  .lead { color: var(--text-body); margin-bottom: 32px; }
+  .lead :global(strong) { color: var(--text-strong); font-weight: var(--fw-bold); }
+  .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .sig { margin: 28px 0 0; font-family: var(--font-display); font-style: italic; color: var(--ink-500); }
+  @media (max-width: 480px) { .actions { flex-direction: column; } }
+</style>
+
+<script>
+  /* Prénoms lus dans localStorage, jamais dans l’URL. Effacement juste après. */
+  const KEY = 'ps_questionnaire';
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const d = JSON.parse(raw) as Record<string, string | string[]>;
+      const parent = typeof d.parentName === 'string' ? d.parentName.trim() : '';
+      const child = typeof d.childName === 'string' ? d.childName.trim() : '';
+      const format = typeof d.format === 'string' ? d.format : '';
+
+      const h1 = document.querySelector<HTMLElement>('[data-merci-title]');
+      if (h1 && parent) h1.textContent = `Merci ${parent} !`;
+
+      const p = document.querySelector<HTMLElement>('[data-merci-text]');
+      if (p) {
+        const pour = child ? ` pour <strong>${child}</strong>` : '';
+        const ou = format === 'Visio' ? ' en visio' : format === 'À domicile' ? ' à domicile' : '';
+        p.innerHTML = `Ton questionnaire${pour} m’a bien été transmis. Je l’étudie avec attention et je reviens vers toi <strong>sous 48h</strong> par email pour fixer ta consultation${ou}.`;
+      }
+      localStorage.removeItem(KEY);
+    }
+  } catch {}
+</script>

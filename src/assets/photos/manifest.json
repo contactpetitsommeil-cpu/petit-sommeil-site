@@ -1,0 +1,428 @@
+{
+  "generated": "2026-09-09T08:11:41.574Z",
+  "upscale": "Upscayl (upscayl-standard-4x, -s 2, moteur Apple Silicon)",
+  "preset": {
+    "brightness": 1.03,
+    "saturation": 0.92,
+    "contrast": {
+      "a": 1.05,
+      "b": -6
+    },
+    "lift": {
+      "a": 0.97,
+      "b": 7
+    },
+    "warm": [
+      [
+        1.02,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0.96
+      ]
+    ]
+  },
+  "results": [
+    {
+      "id": "01-hero",
+      "crop": "full",
+      "file": "site/src/assets/photos/01-hero-full.jpg",
+      "width": 2400,
+      "height": 1572,
+      "size": 526883
+    },
+    {
+      "id": "01-hero",
+      "crop": "mobile",
+      "file": "site/src/assets/photos/01-hero-mobile.jpg",
+      "width": 1200,
+      "height": 1200,
+      "size": 275326,
+      "variant": false
+    },
+    {
+      "id": "01-hero",
+      "crop": "desktop",
+      "file": "site/src/assets/photos/01-hero-desktop.jpg",
+      "width": 1800,
+      "height": 1200,
+      "size": 326933,
+      "variant": false
+    },
+    {
+      "id": "02-portrait",
+      "crop": "full",
+      "file": "site/src/assets/photos/02-portrait-full.jpg",
+      "width": 2400,
+      "height": 3598,
+      "size": 1174164
+    },
+    {
+      "id": "02-portrait",
+      "crop": "all",
+      "file": "site/src/assets/photos/02-portrait-all.jpg",
+      "width": 1200,
+      "height": 1500,
+      "size": 253167,
+      "variant": false
+    },
+    {
+      "id": "03-et-toi",
+      "crop": "full",
+      "file": "site/src/assets/photos/03-et-toi-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 436992
+    },
+    {
+      "id": "03-et-toi",
+      "crop": "mobile",
+      "file": "site/src/assets/photos/03-et-toi-mobile.jpg",
+      "width": 1200,
+      "height": 1600,
+      "size": 208333,
+      "variant": false
+    },
+    {
+      "id": "03-et-toi",
+      "crop": "desktop",
+      "file": "site/src/assets/photos/03-et-toi-desktop.jpg",
+      "width": 2400,
+      "height": 1600,
+      "size": 434280,
+      "variant": false
+    },
+    {
+      "id": "04-detail",
+      "crop": "full",
+      "file": "site/src/assets/photos/04-detail-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 562562
+    },
+    {
+      "id": "04-detail",
+      "crop": "all",
+      "file": "site/src/assets/photos/04-detail-all.jpg",
+      "width": 1200,
+      "height": 1200,
+      "size": 210447,
+      "variant": false
+    },
+    {
+      "id": "05-accompagnements",
+      "crop": "full",
+      "file": "site/src/assets/photos/05-accompagnements-full.jpg",
+      "width": 2400,
+      "height": 1340,
+      "size": 579215
+    },
+    {
+      "id": "05-accompagnements",
+      "crop": "mobile",
+      "file": "site/src/assets/photos/05-accompagnements-mobile.jpg",
+      "width": 1200,
+      "height": 1600,
+      "size": 262091,
+      "variant": false
+    },
+    {
+      "id": "05-accompagnements",
+      "crop": "desktop",
+      "file": "site/src/assets/photos/05-accompagnements-desktop.jpg",
+      "width": 2400,
+      "height": 1350,
+      "size": 579753,
+      "variant": false
+    },
+    {
+      "id": "07-planning",
+      "crop": "full",
+      "file": "site/src/assets/photos/07-planning-full.jpg",
+      "width": 1792,
+      "height": 2390,
+      "size": 499314
+    },
+    {
+      "id": "07-planning",
+      "crop": "all",
+      "file": "site/src/assets/photos/07-planning-all.jpg",
+      "width": 1200,
+      "height": 1600,
+      "size": 263531,
+      "variant": false
+    },
+    {
+      "id": "08-contact",
+      "crop": "all",
+      "file": "site/src/assets/photos/08-contact-all.jpg",
+      "width": 800,
+      "height": 800,
+      "size": 119522,
+      "variant": false
+    },
+    {
+      "id": "09-pieds",
+      "crop": "full",
+      "file": "site/src/assets/photos/09-pieds-full.jpg",
+      "width": 1600,
+      "height": 1067,
+      "size": 426629
+    },
+    {
+      "id": "09-pieds",
+      "crop": "carte",
+      "file": "site/src/assets/photos/09-pieds-carte.jpg",
+      "width": 900,
+      "height": 1125,
+      "size": 229557,
+      "variant": false
+    },
+    {
+      "id": "10-bras",
+      "crop": "full",
+      "file": "site/src/assets/photos/10-bras-full.jpg",
+      "width": 1600,
+      "height": 1067,
+      "size": 448802
+    },
+    {
+      "id": "10-bras",
+      "crop": "carte",
+      "file": "site/src/assets/photos/10-bras-carte.jpg",
+      "width": 900,
+      "height": 1125,
+      "size": 251366,
+      "variant": false
+    },
+    {
+      "id": "11-main",
+      "crop": "full",
+      "file": "site/src/assets/photos/11-main-full.jpg",
+      "width": 1600,
+      "height": 1067,
+      "size": 439024
+    },
+    {
+      "id": "11-main",
+      "crop": "carte",
+      "file": "site/src/assets/photos/11-main-carte.jpg",
+      "width": 900,
+      "height": 1125,
+      "size": 236634,
+      "variant": false
+    },
+    {
+      "id": "12-barreaux",
+      "crop": "full",
+      "file": "site/src/assets/photos/12-barreaux-full.jpg",
+      "width": 1600,
+      "height": 1067,
+      "size": 410109
+    },
+    {
+      "id": "12-barreaux",
+      "crop": "carte",
+      "file": "site/src/assets/photos/12-barreaux-carte.jpg",
+      "width": 900,
+      "height": 1125,
+      "size": 230294,
+      "variant": false
+    },
+    {
+      "id": "13-enfant-3-6",
+      "crop": "full",
+      "file": "site/src/assets/photos/13-enfant-3-6-full.jpg",
+      "width": 1856,
+      "height": 2304,
+      "size": 350944
+    },
+    {
+      "id": "13-enfant-3-6",
+      "crop": "carte",
+      "file": "site/src/assets/photos/13-enfant-3-6-carte.jpg",
+      "width": 900,
+      "height": 1125,
+      "size": 123623,
+      "variant": false
+    },
+    {
+      "id": "14-lit-barreaux",
+      "crop": "full",
+      "file": "site/src/assets/photos/14-lit-barreaux-full.jpg",
+      "width": 1024,
+      "height": 1536,
+      "size": 178502
+    },
+    {
+      "id": "14-lit-barreaux",
+      "crop": "carte",
+      "file": "site/src/assets/photos/14-lit-barreaux-carte.jpg",
+      "width": 900,
+      "height": 1125,
+      "size": 128866,
+      "variant": false
+    },
+    {
+      "id": "15-lune",
+      "crop": "full",
+      "file": "site/src/assets/photos/15-lune-full.jpg",
+      "width": 2400,
+      "height": 3200,
+      "size": 1795742
+    },
+    {
+      "id": "15-lune",
+      "crop": "carte",
+      "file": "site/src/assets/photos/15-lune-carte.jpg",
+      "width": 900,
+      "height": 1125,
+      "size": 295910,
+      "variant": false
+    },
+    {
+      "id": "16-lit-doudou-veilleuse",
+      "crop": "full",
+      "file": "site/src/assets/photos/16-lit-doudou-veilleuse-full.jpg",
+      "width": 1536,
+      "height": 2752,
+      "size": 434043
+    },
+    {
+      "id": "16-lit-doudou-veilleuse",
+      "crop": "carte",
+      "file": "site/src/assets/photos/16-lit-doudou-veilleuse-carte.jpg",
+      "width": 900,
+      "height": 1125,
+      "size": 160671,
+      "variant": false
+    },
+    {
+      "id": "20-allaiter-la-nuit",
+      "crop": "full",
+      "file": "site/src/assets/photos/20-allaiter-la-nuit-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 321533
+    },
+    {
+      "id": "20-allaiter-la-nuit",
+      "crop": "carte",
+      "file": "site/src/assets/photos/20-allaiter-la-nuit-carte.jpg",
+      "width": 1200,
+      "height": 800,
+      "size": 102253,
+      "variant": false
+    },
+    {
+      "id": "21-ce-nest-pas-ta-faute",
+      "crop": "full",
+      "file": "site/src/assets/photos/21-ce-nest-pas-ta-faute-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 246021
+    },
+    {
+      "id": "21-ce-nest-pas-ta-faute",
+      "crop": "carte",
+      "file": "site/src/assets/photos/21-ce-nest-pas-ta-faute-carte.jpg",
+      "width": 1200,
+      "height": 800,
+      "size": 85068,
+      "variant": false
+    },
+    {
+      "id": "22-cododo-ou-pas",
+      "crop": "full",
+      "file": "site/src/assets/photos/22-cododo-ou-pas-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 334090
+    },
+    {
+      "id": "22-cododo-ou-pas",
+      "crop": "carte",
+      "file": "site/src/assets/photos/22-cododo-ou-pas-carte.jpg",
+      "width": 1200,
+      "height": 800,
+      "size": 114438,
+      "variant": false
+    },
+    {
+      "id": "23-laisse-le-pleurer",
+      "crop": "full",
+      "file": "site/src/assets/photos/23-laisse-le-pleurer-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 298320
+    },
+    {
+      "id": "23-laisse-le-pleurer",
+      "crop": "carte",
+      "file": "site/src/assets/photos/23-laisse-le-pleurer-carte.jpg",
+      "width": 1200,
+      "height": 800,
+      "size": 109152,
+      "variant": false
+    },
+    {
+      "id": "24-post-partum",
+      "crop": "full",
+      "file": "site/src/assets/photos/24-post-partum-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 285613
+    },
+    {
+      "id": "24-post-partum",
+      "crop": "carte",
+      "file": "site/src/assets/photos/24-post-partum-carte.jpg",
+      "width": 1200,
+      "height": 800,
+      "size": 102626,
+      "variant": false
+    },
+    {
+      "id": "25-porter-son-bebe",
+      "crop": "full",
+      "file": "site/src/assets/photos/25-porter-son-bebe-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 230827
+    },
+    {
+      "id": "25-porter-son-bebe",
+      "crop": "carte",
+      "file": "site/src/assets/photos/25-porter-son-bebe-carte.jpg",
+      "width": 1200,
+      "height": 800,
+      "size": 81508,
+      "variant": false
+    },
+    {
+      "id": "26-reveil-matinal",
+      "crop": "full",
+      "file": "site/src/assets/photos/26-reveil-matinal-full.jpg",
+      "width": 2400,
+      "height": 1610,
+      "size": 263660
+    },
+    {
+      "id": "26-reveil-matinal",
+      "crop": "carte",
+      "file": "site/src/assets/photos/26-reveil-matinal-carte.jpg",
+      "width": 1200,
+      "height": 800,
+      "size": 92822,
+      "variant": false
+    }
+  ]
+}

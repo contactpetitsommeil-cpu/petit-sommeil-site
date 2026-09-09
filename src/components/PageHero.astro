@@ -1,0 +1,17 @@
+---
+interface Props { eyebrow?: string; title: string; intro?: string }
+const { eyebrow, title, intro } = Astro.props;
+---
+<section class="ph">
+  <div class="container">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    {intro && <p class="lead intro">{intro}</p>}
+  </div>
+</section>
+<style>
+  .ph { padding: 64px 0 40px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, var(--cream-100), var(--cream-50)); }
+  h1 { max-width: 20ch; }
+  .intro { max-width: 620px; margin: 0; }
+  @media (max-width: 720px) { .ph { padding: 40px 0 28px; } }
+</style>

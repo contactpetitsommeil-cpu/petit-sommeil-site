@@ -1,0 +1,171 @@
+---
+import Base from '../layouts/Base.astro';
+import IconCircle from '../components/IconCircle.astro';
+import Logo from '../components/Logo.astro';
+import Photo from '../components/Photo.astro';
+import CTABand from '../components/CTABand.astro';
+import { site } from '../data/site';
+
+/* Textes : livrables/textes/a-propos.md (03/09/2026), version site, huit blocs dans l'ordre du fichier.
+   Son histoire (bloc 2) et « Et toi, dans tout ça ? » (bloc 2 bis, ancre #et-toi) sont ses mots du 02/09,
+   retravaillés et validés le 03/09. Le nuage ☁️ est ici, une seule fois. */
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  mainEntity: {
+    '@type': 'Person',
+    name: site.owner,
+    jobTitle: site.role,
+    email: site.email,
+    worksFor: { '@type': 'ProfessionalService', name: site.name, url: site.url },
+    sameAs: [site.instagram],
+  },
+};
+---
+<Base
+  title="Qui je suis, Sarah, conseillère en sommeil"
+  description="Sarah, conseillère en hygiène de sommeil de 0 à 6 ans à Saint-Malo. Mon fils ne dormait pas, je ne dormais plus. Ce que j’en ai fait."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  </Fragment>
+
+  <!-- 1 et 2. Ouverture et son histoire, en une seule section (règle hybride du 08/09) : le portrait dans la marge,
+       collé sous le titre pendant que le récit défile à droite. Le sceau reste sur le coin du portrait. -->
+  <section class="intro" aria-labelledby="histoire">
+    <div class="container intro-grid">
+      <div class="intro-side">
+        <p class="eyebrow"><span class="about-emoji" aria-hidden="true">☁️</span> À propos</p>
+        <h1>Le sommeil ne s’apprend pas, il s’accompagne</h1>
+        <div class="portrait">
+        <Photo id="02-portrait" widths={[340, 680, 1020]} sizes="(max-width: 900px) 260px, 340px" />
+        <span class="seal" aria-hidden="true"><Logo variant="badge" size={72} /></span>
+        </div>
+        <p class="signature">{site.owner}</p>
+        <p class="signature-role">{site.role}</p>
+      </div>
+
+      <div class="intro-text prose">
+        <p class="lead">C’est comme la marche. On accompagne son enfant, on ne lui apprend pas à poser un pied devant l’autre. On l’encourage à avoir confiance en lui.</p>
+        <p>C’est la phrase que je répète le plus aux familles. Tout ce que je fais en découle.</p>
+        <p class="eyebrow histoire">Mon histoire</p>
+      <h2 id="histoire">Je ne viens pas du sommeil. Je viens de l’épuisement.</h2>
+      <p>En 2020, mon fils est né. La grande découverte de la maternité, dans tous les sens du terme, avec un amour démesuré. Au fil des semaines, on a découvert son reflux et son intolérance aux protéines de lait de vache. Le quotidien n’était pas simple. Et puis les mois ont passé, et mon fils ne dormait pas. Ni le jour, ni la nuit, quelle que soit la méthode.</p>
+      <p>Je me suis renseignée sur le développement des tout-petits, sur plein de choses. Jamais sur le sommeil. Pour moi il n’y avait rien à savoir : il devait dormir, point.</p>
+      <p>Je perdais doucement le moral. Je ne me suis pas rendu compte que j’entrais dans une dépression post-partum. Pourtant j’essayais d’être une maman parfaite, avec la maison toujours propre. La vie de tous les jours s’est compliquée aussi, dans notre famille, avec mes amis. La vie dehors, avec un tout-petit qui ne dormait jamais, me faisait peur.</p>
+      <p>Juste avant son premier anniversaire, j’ai découvert par hasard, sur les réseaux sociaux, ce métier : conseillère en hygiène de sommeil. Je ne dormais plus depuis des mois, je me voyais m’éteindre, toute ma vie était mise de côté. Je me suis dit : qui ne tente rien n’a rien. J’ai fait appel à ses services. Et là, j’ai découvert ce qu’était le sommeil. Une oreille attentive, sans jugement, présente pour m’accompagner et me soutenir.</p>
+      <p class="pause">Tout allait mieux.</p>
+      <p>En 2025, ma fille est née. Je m’étais promis de ne pas revivre la même chose, alors j’ai mis en place ce que j’avais appris en 2021. J’ai eu très peur lors des premiers couchers. Je te mentirais si je te disais que j’étais en pleine confiance. Non, c’était resté dans un coin de ma tête.</p>
+      <p>Quand j’ai eu 30 ans et ma fille un an, je me suis rendu compte de l’importance du sommeil. Que la maternité ne se vit pas de la même façon quand on dort. Et qu’il était important pour moi de faire de cette expérience quelque chose de positif, à partager autour de moi, pour aider les familles qui en ont besoin.</p>
+      <p>Alors je me suis formée. Ça m’a permis de faire la paix avec mes peurs sur le sommeil de mes enfants, et de mieux comprendre tout ce qui entoure ce mot : le sommeil.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 bis. Et toi, dans tout ça ? Version entière, cible du lien « Lire la suite » de l'accueil. -->
+  <section class="section toi" id="et-toi" aria-labelledby="toi">
+    <div class="container prose">
+      <p class="eyebrow">Toi aussi</p>
+      <h2 id="toi">Et toi, dans tout ça ?</h2>
+      <p>On parle beaucoup du sommeil de bébé. De ses réveils la nuit, de ses siestes, de ses endormissements, de ses besoins, de son rythme. Mais toi, dans tout ça ?</p>
+      <p>Derrière chaque enfant qui a du mal à dormir, il y a souvent une famille qui se pose des questions, qui cherche, qui doute. Et parfois un parent tout simplement épuisé(e).</p>
+      <p>Tu te demandes peut-être si tu fais les choses correctement. Si tu aurais dû faire autrement. Si ton enfant est le seul à ne pas dormir. Alors tu essaies. Tu écoutes les conseils de tata Martine et de tonton Roger, tu compares avec les enfants autour de toi, tu vas voir ce qui se dit sur les réseaux. Tu changes l’heure du coucher, puis la routine. Et tu finis par te sentir perdu(e) dans toutes ces informations.</p>
+      <h3 class="inter">Tu as le droit d’être fatigué(e), toi aussi.</h3>
+      <p>Être parent ne veut pas dire être capable de supporter le manque de sommeil. Il pèse sur ton moral, ta patience, ton couple, ton travail. Et sur la façon dont tu vis les moments de tous les jours avec ton enfant.</p>
+      <p>Tu peux aimer ton enfant profondément et être à bout. Tu peux être heureux(se) d’être parent et avoir besoin d’aide. Tu peux être patient(e) un jour et ne plus avoir de ressources le lendemain.</p>
+      <p>Ça ne fait pas de toi un mauvais parent. Ça fait de toi un parent humain.</p>
+      <p>Chaque famille a son histoire, son rythme, ses valeurs, ses besoins. Mon rôle est de t’écouter, de comprendre ce qui se passe vraiment chez vous, et de chercher avec toi des solutions adaptées à ton enfant. Mais aussi à toi.</p>
+      <p>Ton sommeil compte aussi. Quand on se parle, je veux aussi savoir : comment tu vas ? Combien de temps tu dors ? Comment tu vis les nuits ? Qu’est-ce qui est devenu difficile pour toi ? De quoi tu as besoin aujourd’hui ?</p>
+      <p class="pause">Tu mérites, toi aussi, d’être écouté(e), soutenu(e), accompagné(e).</p>
+    </div>
+  </section>
+
+  <!-- 3 à 6. Ce qu'elle en a gardé, formation, limites, secteur -->
+  <section class="section" aria-label="Ma façon de travailler">
+    <div class="container blocs">
+      <article class="bloc">
+        <IconCircle name="heart" size={52} />
+        <h2>Ce que j’en ai gardé</h2>
+        <p>Je ne donne pas d’ordres. Je ne suis pas là pour te dire comment élever ton enfant, je suis là pour t’accompagner dans tes envies, tes besoins et ta qualité de vie.</p>
+        <p>Et je ne parle pas que du sommeil de ton enfant. Le sommeil englobe l’enfant et son parent. Si tu as besoin de poser ce que tu portes, c’est aussi pour ça que je suis là.</p>
+      </article>
+      <article class="bloc">
+        <IconCircle name="book" size={52} />
+        <h2>Ma formation</h2>
+        <p>Je suis conseillère en hygiène de sommeil. J’ai été formée par Oh Mama Care sur l’hygiène de sommeil des enfants de 0 à 6 ans, session de mai 2026, avec Laurence Dreux, Marion Weber et Anaëlle Voillet.</p>
+        <p>C’est aussi pour ça que mon accompagnement s’arrête à 6 ans. Au-delà, je ne suis pas la bonne personne.</p>
+      </article>
+      <article class="bloc">
+        <IconCircle name="shield" size={52} />
+        <h2>Ce que je ne fais pas</h2>
+        <p>Je ne suis pas médecin et je ne pose aucun diagnostic.</p>
+        <p>Il y a des situations où le sommeil n’est que la partie visible : un reflux, une douleur, un souci ORL, une suspicion d’apnée, un allaitement qui ne va pas. Dans ces cas-là, je te le dis, et je t’oriente vers ton pédiatre, ton médecin, un ostéopathe ou une consultante en lactation.</p>
+        <p>Ça m’est déjà arrivé. La maman m’a remerciée.</p>
+      </article>
+      <article class="bloc">
+        <IconCircle name="video" size={52} />
+        <h2>Où me trouver</h2>
+        <p>Je consulte en visio, partout, et à domicile autour de Saint-Malo : Saint-Méloir-des-Ondes, Cancale, Plerguer, Miniac, Le Tronchet, Beaussais-sur-Mer, Dol, Dinard.</p>
+        <p>Au-delà de 20 km, je compte 1 € du kilomètre.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 7. Appel -->
+  <CTABand
+    title="Doucement, pas à pas"
+    text="Si tu te reconnais dans ce que tu viens de lire, on peut en parler."
+  />
+</Base>
+
+<style>
+  .intro { padding: 64px 0 var(--section-y); border-bottom: 1px solid var(--border); background: linear-gradient(180deg, var(--cream-100), var(--cream-50)); }
+  .intro-grid { display: grid; grid-template-columns: 340px 1fr; gap: 64px; align-items: start; }
+  .intro-side { position: sticky; top: 88px; }
+  .intro-side h1 { max-width: 12ch; margin-bottom: 0; }
+  .portrait { position: relative; margin-top: 22px; aspect-ratio: 4 / 5; border-radius: var(--radius-xl); background: var(--surface-inset); box-shadow: var(--shadow-md); }
+  .portrait :global(picture) { border-radius: inherit; overflow: hidden; }
+  .portrait :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .seal { position: absolute; right: -14px; bottom: -14px; width: 88px; height: 88px; border-radius: 50%; background: var(--cream-100); box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: center; }
+
+  .about-emoji { font-size: 14px; margin-right: 6px; }
+  .intro-text .lead { color: var(--text-strong); }
+  .histoire { margin-top: 36px; }
+  .intro-text h2 { margin-bottom: 24px; }
+
+  .signature { font-family: var(--font-display); font-style: italic; font-size: 30px; color: var(--text-strong); margin: 32px 0 0; }
+  .signature-role { font-size: var(--fs-sm); color: var(--text-muted); margin: 2px 0 0; }
+
+  /* Récit : une colonne de lecture */
+  .prose { max-width: 680px; }
+  .prose h2 { margin-bottom: 24px; }
+  .prose p { font-size: 17px; line-height: 1.7; margin: 0 0 18px; }
+  .prose p:last-child { margin-bottom: 0; }
+  .pause { font-family: var(--font-display); font-style: italic; font-size: 24px; line-height: 1.4; color: var(--text-strong); margin: 28px 0 !important; }
+  .inter { font-size: var(--fs-h3); margin: 32px 0 14px; }
+
+  /* Fond rose de la charte, comme sur l'accueil. Eyebrow en marine, pas de texte atténué. */
+  .toi { background: var(--rose-100); border-block: 1px solid var(--rose-300); scroll-margin-top: 80px; }
+  .toi .eyebrow { color: var(--navy-900); }
+
+  /* Quatre blocs : ce qu'elle en a gardé, formation, limites, secteur */
+  .blocs { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .bloc { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px 28px; }
+  .bloc h2 { font-size: var(--fs-h3); margin: 18px 0 10px; }
+  .bloc p { margin: 0 0 12px; max-width: 56ch; }
+  .bloc p:last-child { margin: 0; }
+
+  @media (max-width: 900px) {
+    .intro-grid { grid-template-columns: 1fr; gap: 32px; }
+    .intro-side { position: static; }
+    .intro-side h1 { max-width: none; }
+    .portrait { max-width: 260px; }
+    .blocs { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .signature { font-size: 26px; }
+    .pause { font-size: 21px; }
+    .bloc { padding: 24px 20px; }
+  }
+</style>

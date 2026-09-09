@@ -1,0 +1,116 @@
+/* Petit Sommeil, tokens. Source de vérité : export Claude Design. Ne rien ajouter hors de ce fichier. */
+:root {
+  /* Crème */
+  --cream-50:  #F8F3EA;
+  --cream-100: #FCF9F3;
+  --cream-200: #F2EADC;
+  --cream-300: #EBE0CE;
+  --border-strong: #DACDB6;
+
+  /* Or */
+  /* Or : le doré clair de la charte de Sarah (03/09/2026) */
+  --gold-300: #F3E7CF;
+  --gold-400: #EFDDBB;  /* hover du bouton gold */
+  --gold-500: #E5C999;  /* accent principal : bouton gold, icônes et rond sur marine */
+  --gold-600: #C7A36A;  /* or antique : étoiles et filets */
+  --gold-700: #826538;  /* or foncé : seul or lisible en texte sur crème (AA), eyebrows */
+
+  /* Marine */
+  --navy-100: #DCE2EC;
+  --navy-600: #3A578E;
+  --navy-700: #2A4576;
+  --navy-800: #14275C;
+  --navy-900: #0B1A4A;  /* le bleu nuit de la charte */
+
+  /* Fonds doux de la charte, jamais du texte dessus en clair, jamais de texte atténué ni d'eyebrow or */
+  --rose-100: #F1E1E1;
+  --rose-300: #D9B4B4;
+  --sage-100: #E3E8DE;
+  --sage-300: #BFC7B5;
+
+  /* Encre */
+  --ink-900: #1B2440;
+  --ink-700: #4A463E;
+  --ink-500: #6F6960;
+  --ink-300: #ABA396;
+
+  --error: #B0533F;
+  --repas: #3E8E5A;  /* vert du point « repas » du planning, identique aux PDF et au visuel (build.py) */
+
+  /* Sémantique */
+  --bg-page: var(--cream-50);
+  --surface-card: var(--cream-100);
+  --surface-inset: var(--cream-200);
+  --surface-invert: var(--navy-900);
+  --border: var(--cream-300);
+  --border-on-dark: rgba(244, 239, 230, 0.16);
+  --accent: var(--gold-500);
+  --accent-strong: var(--gold-700);
+  --accent-soft: var(--gold-300);
+  --info: var(--navy-700);
+  --text-strong: var(--navy-900);
+  --text-body: var(--ink-700);
+  --text-muted: var(--ink-500);
+  --text-on-dark: #F4EFE6;
+  --text-on-dark-muted: #B9C2D4;
+  --focus-ring: var(--navy-700);  /* fonds clairs ; gold-400 sur marine via .on-dark (global.css) */
+
+  /* Typo */
+  --font-display: 'Playfair Display', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Mulish', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-display: 64px;
+  --fs-h1: 44px;
+  --fs-h2: 34px;
+  --fs-h3: 24px;
+  --fs-lead: 19px;
+  --fs-body: 16px;
+  --fs-sm: 14px;
+  --fs-xs: 13px;
+  --fs-eyebrow: 13px;
+  /* Trois graisses chargées seulement (décision de Florent du 08/09, rapport 09) : Mulish 400, 400 italique, 700 ;
+     Playfair 400 italique, 700 (le 400 regular reste déclaré, plus utilisé). semibold et extrabold pointent sur bold. */
+  --fw-regular: 400;
+  --fw-bold: 700;
+  --fw-semibold: var(--fw-bold);
+  --fw-extrabold: var(--fw-bold);
+  --lh-tight: 1.08;
+  --lh-snug: 1.25;
+  --lh-normal: 1.6;
+
+  /* Layout */
+  --container-max: 1180px;
+  --container-pad: 24px;
+  --section-y: 96px;
+
+  /* Rayons */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* Ombres */
+  --shadow-xs: 0 1px 2px rgba(43, 33, 18, 0.05);
+  --shadow-sm: 0 2px 8px rgba(43, 33, 18, 0.06);
+  --shadow-md: 0 10px 28px rgba(43, 33, 18, 0.07);
+  --shadow-lg: 0 22px 50px rgba(22, 25, 40, 0.10);
+  --shadow-navy: 0 24px 60px rgba(16, 24, 47, 0.28);
+
+  /* Mouvement */
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --fs-display: 40px;
+    --fs-h1: 34px;
+    --fs-h2: 28px;
+    --fs-h3: 21px;
+    --fs-lead: 17px;
+    --container-pad: 20px;
+    --section-y: 56px;
+  }
+}

@@ -1,0 +1,28 @@
+---
+/**
+ * Logo Petit Sommeil, charte de Sarah (03/09/2026). Deux formes, les SVG vectorisés par le bureau
+ * (livrables/charte/), jamais redessinés ni remplacés par du texte.
+ * - `wordmark` : « Petit / SOMMEIL », inliné pour hériter de la couleur (`tone`). `size` = hauteur en px.
+ * - `badge` : le rond (double cercle, wordmark, « Conseillère en sommeil », cœur), en <img> pour rester
+ *   léger (35 Ko), deux fichiers colorés : marine sur fond clair, doré sur marine. `size` = diamètre en px.
+ */
+import wordmark from '../assets/logo-wordmark.svg?raw';
+interface Props { variant?: 'wordmark' | 'badge'; tone?: 'navy' | 'light'; size?: number; class?: string }
+const { variant = 'wordmark', tone = 'navy', size = 36, class: cls } = Astro.props;
+const RATIO = 3870 / 1326;
+const inline = wordmark
+  .replace('<svg ', `<svg width="${Math.round(size * RATIO)}" height="${size}" aria-hidden="true" focusable="false" `);
+---
+{variant === 'badge' ? (
+  <img class:list={['logo-badge', cls]} src={tone === 'light' ? '/images/logo-rond-gold.svg' : '/images/logo-rond-navy.svg'}
+    width={size} height={size} alt="" loading="lazy" decoding="async" />
+) : (
+  <span class:list={['logo', tone, cls]} style={`--h:${size}px`} set:html={inline} />
+)}
+
+<style>
+  .logo { display: inline-flex; color: var(--navy-900); line-height: 0; }
+  .logo.light { color: var(--text-on-dark); }
+  .logo :global(svg) { height: var(--h); width: auto; display: block; }
+  .logo-badge { display: block; }
+</style>

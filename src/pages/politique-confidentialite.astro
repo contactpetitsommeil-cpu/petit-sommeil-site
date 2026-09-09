@@ -1,0 +1,8 @@
+---
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { confidentialite } from '../data/legal';
+---
+<Base title="Politique de confidentialité" description="Quelles données je collecte, pourquoi, combien de temps je les conserve et comment exercer tes droits RGPD auprès de Petit Sommeil.">
+  <LegalPage doc={confidentialite} />
+</Base>

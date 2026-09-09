@@ -1,0 +1,379 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import IconCircle from '../components/IconCircle.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import Photo from '../components/Photo.astro';
+import Scene from '../components/Scene.astro';
+import { site, planningVisibility } from '../data/site';
+import { articles } from '../data/photos';
+import { services, parcours } from '../data/services';
+import { testimonials } from '../data/testimonials';
+import { icons } from '../data/icons';
+
+/* Textes : livrables/textes/accueil.md (03/09/2026), dix blocs. Bloc 2 « Et toi, dans tout ça ? » en version courte,
+   la version entière est sur /a-propos#et-toi. Bloc 8 : les trois avis reçus le 02/09 (data/testimonials.ts). */
+
+/* Les trois articles les plus récents. */
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 3);
+
+const okList = [
+  { q: 'Tu veux du maternage proximal ?', a: 'C’est OK.' },
+  { q: 'Tu veux partager ta chambre ?', a: 'C’est OK.' },
+  { q: 'Tu veux un endormissement autonome, en douceur ?', a: 'C’est OK.' },
+];
+---
+<Base
+  title="Conseillère en sommeil bébé, Saint-Malo"
+  description="Sarah, conseillère en hygiène de sommeil de 0 à 6 ans à Saint-Malo. Un échange, un plan d’action construit avec toi. Sans méthode, sans culpabilité."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'ProfessionalService', name: site.name, url: site.url, email: site.email,
+      description: 'Conseillère en hygiène de sommeil pour les enfants de 0 à 6 ans, à Saint-Malo et alentours. En visio ou à domicile.',
+      founder: { '@type': 'Person', name: site.owner, jobTitle: site.role },
+      areaServed: ['Saint-Malo', 'Dinard', 'Dol-de-Bretagne', 'Cancale', 'FR'], sameAs: [site.instagram],
+    })} />
+  </Fragment>
+
+  <!-- 1. Hero -->
+  <section class="hero container">
+    <div class="hero-text">
+      <p class="eyebrow hero-eyebrow"><span class="hero-emoji" aria-hidden="true">🌙</span> Petit Sommeil</p>
+      <h1><span class="tag-line1">{site.taglineLine1}</span><br /><span class="tag-line2">{site.taglineLine2}</span></h1>
+      <p class="lead sub">Conseillère en hygiène de sommeil pour les enfants de 0 à 6 ans, à Saint-Malo et alentours. En visio ou chez toi.</p>
+      <div class="ctas">
+        <Button href="/questionnaire" variant="gold" size="lg">
+          <Fragment slot="icon" set:html={icons.calendar} />
+          Démarrer le questionnaire
+        </Button>
+        <Button href="/accompagnements" variant="secondary" size="lg">Découvrir les accompagnements</Button>
+      </div>
+      <p class="reassure">{site.reassurance}</p>
+    </div>
+    <div class="hero-visual">
+      <!-- Photo du shooting (commande 9) : 4:5 sous 720 px, 3:2 au-dessus. Seule image chargée en priorité. -->
+      <figure class="hero-photo">
+        <Photo id="01-hero" mobile="mobile" desktop="desktop" priority
+          widths={[640, 1280, 1800]} sizes="(max-width: 900px) calc(100vw - 48px), 640px" mobileWidths={[360, 660, 1000]} />
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2. Et toi, dans tout ça ? Version courte, décision du 03/09, la suite est sur /a-propos#et-toi.
+       En scène (règle hybride du 08/09) : la photo du parent à la fenêtre reste, la carte rose glisse à sa droite. -->
+  <Scene id="03-et-toi" carte="droite" sujet="gauche" tone="rose" labelledby="toi">
+    <p class="eyebrow">Toi aussi</p>
+    <h2 id="toi">Et toi, dans tout ça ?</h2>
+        <p>On parle beaucoup du sommeil de bébé. De ses réveils, de ses siestes, de son rythme. Mais toi ?</p>
+        <p>Derrière un enfant qui dort mal, il y a souvent un parent qui doute, qui cherche, qui essaie tout ce qu’il lit. Et qui finit par se sentir perdu(e).</p>
+        <p>Tu as le droit d’être fatigué(e), toi aussi. Tu peux aimer ton enfant profondément et ne plus avoir de ressources le lendemain. Ça ne fait pas de toi un mauvais parent. Ça fait de toi un parent.</p>
+        <p>Quand on se parle, je veux aussi savoir comment tu vas, combien tu dors, ce qui est devenu difficile pour toi. Ton sommeil compte aussi.</p>
+    <p class="more"><a href="/a-propos#et-toi">Lire la suite<span class="sr-only">, sur la page À propos</span></a></p>
+  </Scene>
+
+  <!-- 3. Ce que je fais -->
+  <section class="section" aria-labelledby="fais">
+    <div class="container two">
+      <div>
+        <p class="eyebrow">Ce que je fais</p>
+        <h2 id="fais">Un plan construit avec toi, pas pour toi</h2>
+      </div>
+      <div class="two-body">
+        <p>J’analyse le sommeil de ton enfant, son rythme, ses nuits, ses journées. Puis on construit ensemble un plan d’action qui tient dans votre vie, pas dans un manuel.</p>
+        <p>Tu connais ton enfant mieux que moi. Mon rôle est de t’outiller, jamais de décider à ta place.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Ce que je ne ferai jamais -->
+  <section class="section promise on-dark" aria-labelledby="reve">
+    <div class="container promise-inner">
+      <div>
+      <p class="eyebrow eyebrow-dark">Ce que je ne ferai jamais</p>
+      <h2 id="reve">Je ne te vendrai jamais de rêve</h2>
+      <ul class="ok">
+        {okList.map((o) => (
+          <li><span class="ok-q">{o.q}</span> <span class="ok-a">{o.a}</span></li>
+        ))}
+      </ul>
+      <div class="promise-body">
+        <p>Ce sont tes choix, et ils ne se discutent pas. Aucune méthode de pleurs contrôlés ici, sous aucune forme.</p>
+        <p>Je ne te promettrai pas de nuits parfaites. Un enfant est un être vivant à part entière, il peut avoir des envies différentes des tiennes. Ce que je peux te promettre, c’est de faire de mon mieux.</p>
+      </div>
+      </div>
+      <!-- Une image qui apaise à côté du texte (Florent, 08/09) : le lit à barreaux et son mobile. -->
+      <figure class="promise-photo"><Photo id="14-lit-barreaux" desktop="carte" widths={[440, 880]} sizes="(max-width: 900px) 320px, 440px" /></figure>
+    </div>
+  </section>
+
+  <!-- 5. Comment ça se passe -->
+  <section class="section" aria-labelledby="etapes">
+    <div class="container">
+      <SectionHeading eyebrow="Le parcours" title="Comment ça se passe" />
+      <ol class="steps">
+        {parcours.map((s, i) => (
+          <li>
+            <span class="step-icon"><IconCircle name={s.icon} size={48} /><span class="step-n">{i + 1}</span></span>
+            <div><h3>{s.title}</h3><p>{s.text}</p></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {planningVisibility === 'accueil' && (
+    <!-- Le planning à télécharger, bloc dédié après le parcours (maquette A, choisie par Sarah le 04/09/2026). Fond sauge : la couleur de l'outil. -->
+    <section class="section planning" aria-labelledby="planning">
+      <div class="container planning-inner">
+        <!-- Règle hybride du 08/09 : la photo des mains dans la marge, sous le titre, collée pendant que le texte défile.
+             La feuille du PDF reste l'objet à télécharger sur /planning-de-sommeil. -->
+        <div class="planning-side">
+          <p class="eyebrow">À imprimer, gratuit</p>
+          <h2 id="planning">Le planning de sommeil de ton enfant</h2>
+          <figure class="marge"><Photo id="04-detail" widths={[360, 720, 1080]} sizes="(max-width: 900px) 220px, 360px" /></figure>
+        </div>
+        <div class="planning-body">
+          <p>Sept jours, une feuille, un stylo. C’est le document que je donne à toutes les familles avant notre rendez-vous, et tu peux l’avoir tout de suite. Deux versions, 0 à 2 ans et 2 à 6 ans.</p>
+          <p>Une nuit ne dit rien, une semaine dit presque tout. C’est ce document qui me permet de comprendre les nuits de ton enfant avant qu’on se parle.</p>
+          <div class="planning-cta">
+            <!-- La première page du vrai PDF (site/scripts/apercu-planning.sh), à côté du bouton (Florent, 08/09). -->
+            <img class="planning-sheet" src="/images/planning-apercu.webp" width="1400" height="991" loading="lazy" decoding="async"
+              alt="La feuille du planning : sept lignes pour les jours, vingt-quatre colonnes pour les heures, la légende et un espace pour les annotations" />
+            <div class="planning-action">
+              <Button href="/planning-de-sommeil" variant="primary">Recevoir le planning</Button>
+              <span class="planning-note">Gratuit · Sans engagement</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 6. Les âges -->
+  <section class="section ages" aria-labelledby="ages">
+    <div class="container">
+      <div class="two">
+        <div>
+          <p class="eyebrow">Les âges</p>
+          <h2 id="ages">De la naissance à 6 ans</h2>
+        </div>
+        <div class="two-body">
+          <p>Chaque âge a son sommeil. Un bébé de trois mois et un enfant de quatre ans ne se couchent pas pour les mêmes raisons, et ne se réveillent pas pour les mêmes non plus.</p>
+        </div>
+      </div>
+      <ul class="age-list">
+        {services.map((s) => (
+          <li><a href={`/accompagnements#${s.id}`}><span class="age-photo"><Photo id={s.photo} desktop="carte" widths={[64, 128]} sizes="56px" /></span><span class="age-txt"><span class="age-t">{s.title}</span><span class="age-n">{s.age}</span></span></a></li>
+        ))}
+      </ul>
+      <div class="ages-cta"><Button href="/accompagnements" variant="secondary">Découvrir les accompagnements</Button></div>
+    </div>
+  </section>
+
+  <!-- 7. Si je ne suis pas la bonne personne -->
+  <section class="section" aria-labelledby="limites">
+    <div class="container limites">
+      <!-- Le lit à barreaux, le doudou et la veilleuse (Florent, 09/09), à la place de la lune du 08/09. -->
+      <figure class="limites-photo"><Photo id="16-lit-doudou-veilleuse" desktop="carte" widths={[240, 480, 720]} sizes="240px" /></figure>
+      <div>
+        <p class="eyebrow">Si je ne suis pas la bonne personne</p>
+        <h2 id="limites">Je connais mes limites</h2>
+        <p>Je suis conseillère en hygiène de sommeil, je ne suis pas médecin. Je ne pose aucun diagnostic.</p>
+        <p>S’il se passe quelque chose qui sort du sommeil, je te le dis et je t’oriente vers la bonne personne : ton pédiatre, ton médecin, un ostéopathe, une consultante en lactation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Témoignages : les trois avis Google reçus le 02/09, forme actée le 03/09 (prénom et initiale, emojis conservés).
+       Présentés comme sur la fiche d'établissement : cinq étoiles et logo Google (décision de Florent le 03/09). -->
+  <section class="section avis" aria-labelledby="avis">
+    <div class="container">
+      <div class="avis-head">
+        <SectionHeading eyebrow="Les familles" title="Ce qu’en disent les familles" />
+        <p class="avis-google">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          <span>Avis Google</span>
+          <span class="avis-note" aria-label="Note de 5 sur 5"><strong>5,0</strong> <span class="avis-stars" aria-hidden="true">★★★★★</span></span>
+        </p>
+      </div>
+      <div class="grid-3">
+        {testimonials.map((t) => <TestimonialCard quote={t.quote} author={t.author} />)}
+      </div>
+      <div class="avis-cta">
+        <Button href={site.googleReviewUrl} variant="secondary" target="_blank" rel="noreferrer">Laisser un avis sur Google<span class="sr-only"> (nouvelle fenêtre)</span></Button>
+        <p class="avis-cta-note">Tu as travaillé avec moi ? Ton avis aide d’autres familles à me trouver.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Le coin conseils, sur les vrais articles -->
+  {posts.length > 0 && (
+    <section class="section articles">
+      <div class="container">
+        <SectionHeading eyebrow="Le coin conseils" title="Des repères pour t’y retrouver" />
+        <div class="grid-3">
+          {posts.map((p) => (
+            <ArticleCard href={`/blog/${p.id}`} title={p.data.title} description={p.data.description}
+              category={p.data.category} date={p.data.date} readingTime={p.data.readingTime} image={articles[p.id]} />
+          ))}
+        </div>
+        <p class="articles-foot"><a href="/blog">Voir tous les articles →</a></p>
+      </div>
+    </section>
+  )}
+
+  <!-- 9. Dernier appel -->
+  <section class="section last on-dark" aria-labelledby="last">
+    <div class="container last-inner">
+      <div>
+        <h2 id="last">Prends le temps qu’il te faut</h2>
+        <p>Tu n’as pas besoin d’avoir tout compris avant de m’écrire. Le questionnaire prend cinq minutes, et il est sauvegardé au fur et à mesure. Tu peux t’arrêter et revenir.</p>
+      </div>
+      <div class="last-action">
+        <Button href="/questionnaire" variant="gold" size="lg">Démarrer le questionnaire</Button>
+        <span class="reassure-dark">{site.reassurance}</span>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  /* Sur ordinateur, le hero occupe tout l'écran sous l'en-tête : la scène qui suit n'apparaît qu'en défilant (Florent, 08/09). */
+  .hero { display: grid; grid-template-columns: 1fr 1.1fr; align-items: center; gap: 56px; padding-top: 48px; padding-bottom: 48px; min-height: calc(100vh - 73px); }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 20px; }
+  .hero-emoji { font-size: 14px; line-height: 1; }
+  .hero > * { min-width: 0; }  /* la colonne de texte ne peut pas forcer un débordement horizontal (polish 08/09) */
+  .hero h1 { font-size: min(56px, var(--fs-display)); line-height: var(--lh-tight); margin-bottom: 20px; }  /* 56 et non 64 sur ordinateur : « il s'accompagne. » tient sur une ligne à côté de la photo élargie ; 40 sur téléphone (08/09) */
+  .tag-line1 { display: inline-block; color: var(--ink-500); font-weight: var(--fw-bold); font-size: 0.72em; } /* 700 comme la seconde ligne, la couleur fait la différence (08/09) */
+  .tag-line2 { display: inline-block; color: var(--text-strong); font-weight: var(--fw-bold); }
+  .sub { color: var(--text-body); max-width: 46ch; margin-bottom: 14px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; margin: 28px 0 12px; }
+  .reassure { font-size: var(--fs-sm); color: var(--text-muted); margin: 0; }
+  .hero-visual { display: flex; justify-content: center; }
+  .hero-photo { margin: 0; width: 100%; border-radius: var(--radius-xl); overflow: hidden; background: var(--surface-inset); box-shadow: var(--shadow-sm); }
+
+  /* Deux colonnes titre / corps */
+  .two { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: start; }
+  .two h2 { margin: 6px 0 0; }
+  .two-body p { margin: 0 0 14px; font-size: var(--fs-lead); line-height: 1.55; }
+  .two-body p:last-child { margin-bottom: 0; }
+
+  /* Et toi, dans tout ça ? : carte rose de la scène (Scene.astro), le lien « Lire la suite » en dessous */
+  .more { margin-top: 20px !important; }
+  .more a { font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--navy-900); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--gold-500); }
+  .more a:hover { color: var(--gold-700); } /* or foncé : seul or lisible en texte, sur rose comme sur crème */
+
+  /* Promesse, patron « c'est OK » */
+  .promise { background: var(--navy-900); color: var(--text-on-dark); }
+  .promise-inner { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; }
+  .promise-photo { margin: 0; width: 100%; max-width: 440px; justify-self: end; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-navy); }
+  .eyebrow-dark { color: var(--gold-400); }
+  .promise h2 { color: var(--text-on-dark); margin-bottom: 28px; }
+  .ok { list-style: none; margin: 0 0 28px; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 640px; }
+  .ok li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; padding: 14px 18px; background: rgba(244,239,230,0.06); border: 1px solid var(--border-on-dark); border-radius: var(--radius-md); }
+  .ok-q { color: var(--text-on-dark); font-size: 17px; }
+  .ok-a { font-family: var(--font-display); font-style: italic; font-size: 20px; color: var(--gold-400); }
+  .promise-body { max-width: 640px; }
+  .promise-body p { color: var(--text-on-dark-muted); margin: 0 0 12px; }
+  .promise-body p:last-child { margin: 0; }
+
+  /* Parcours */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+  .steps li { display: flex; flex-direction: column; gap: 14px; background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 20px; }
+  .step-icon { position: relative; align-self: flex-start; }
+  .step-n { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: var(--gold-500); color: var(--navy-900); font-size: 11px; font-weight: var(--fw-extrabold); display: inline-flex; align-items: center; justify-content: center; }
+  .steps h3 { font-size: 18px; margin: 0 0 6px; line-height: 1.3; }
+  .steps p { font-size: var(--fs-sm); margin: 0; }
+
+  /* Planning à télécharger (maquette A) */
+  .planning { background: var(--sage-100); border-block: 1px solid var(--sage-300); }
+  .planning .eyebrow { color: var(--navy-900); }
+  .planning-inner { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: start; }
+  .planning-side { position: sticky; top: 88px; }
+  .planning h2 { margin: 6px 0 0; }
+  .marge { margin: 22px 0 0; max-width: 360px; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); background: var(--surface-inset); }
+  .planning-body p { margin: 0 0 14px; font-size: var(--fs-lead); line-height: 1.55; max-width: 52ch; }
+  .planning-cta { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-top: 24px; }
+  .planning-sheet { width: 220px; height: auto; flex: 0 0 auto; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); transform: rotate(-2deg); }
+  .planning-action { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .planning-note { font-size: var(--fs-sm); color: var(--text-body); }
+
+  /* Les âges */
+  .ages { background: var(--cream-100); border-block: 1px solid var(--border); }
+  .age-list { list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .age-list a { display: flex; align-items: center; gap: 12px; padding: 12px 14px; height: 100%; background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-strong); transition: border-color var(--dur-base) var(--ease-soft), transform var(--dur-base) var(--ease-soft); }
+  .age-list a:hover { border-color: var(--gold-400); transform: translateY(-2px); }
+  .age-photo { width: 64px; height: 64px; flex-shrink: 0; border-radius: var(--radius-md); overflow: hidden; background: var(--surface-inset); }
+  .age-photo :global(picture), .age-photo :global(img) { width: 100%; height: 100%; }
+  .age-photo :global(img) { object-fit: cover; }
+  .age-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .age-t { font-weight: var(--fw-bold); }
+  .age-n { font-family: var(--font-display); font-style: italic; font-size: var(--fs-sm); color: var(--ink-500); line-height: 1.3; }
+  .ages-cta { margin-top: 28px; }
+
+  /* Limites */
+  .limites { display: grid; grid-template-columns: 240px 1fr; gap: 40px; align-items: center; background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 40px; }
+  .limites-photo { margin: 0; border-radius: var(--radius-lg); overflow: hidden; }
+  .limites h2 { margin: 6px 0 14px; }
+  .limites p { margin: 0 0 12px; max-width: 60ch; }
+  .limites p:last-child { margin: 0; }
+
+  /* Témoignages (avis Google) et articles */
+  .avis { background: var(--cream-100); border-block: 1px solid var(--border); }
+  .avis-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .avis-head :global(.sh) { margin-bottom: 0; }
+  .avis-google { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 40px; padding: 10px 16px; background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: var(--fs-sm); font-weight: var(--fw-bold); color: var(--text-strong); }
+  .avis-google svg { width: 20px; height: 20px; }
+  .avis-note { display: inline-flex; align-items: center; gap: 6px; padding-left: 10px; border-left: 1px solid var(--border-strong); }
+  .avis-stars { color: #FBBC04; letter-spacing: 0.04em; }
+  .avis-cta { margin-top: 32px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .avis-cta-note { margin: 0; font-size: var(--fs-sm); color: var(--text-muted); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .articles-foot { margin: 28px 0 0; }
+  .articles-foot a { color: var(--navy-900); font-weight: var(--fw-bold); }
+
+  /* Dernier appel */
+  .last { background: var(--navy-900); color: var(--text-on-dark); }
+  .last-inner { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
+  .last h2 { color: var(--text-on-dark); margin-bottom: 12px; }
+  .last p { color: var(--text-on-dark-muted); margin: 0; max-width: 52ch; }
+  .last-action { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; justify-self: end; }
+  .reassure-dark { font-size: var(--fs-xs); color: var(--text-on-dark-muted); }
+
+  @media (max-width: 1000px) {
+    .steps { grid-template-columns: repeat(3, 1fr); }
+    .age-list { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .hero, .two, .last-inner, .planning-inner, .promise-inner { grid-template-columns: 1fr; }
+    .promise-photo { max-width: 320px; justify-self: start; }
+    .planning-side { position: static; }
+    .marge { max-width: 220px; }
+    .two { gap: 16px; }
+    .hero { padding-top: 40px; padding-bottom: 48px; min-height: 0; }
+    .hero-visual { order: -1; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .limites { grid-template-columns: 1fr; padding: 24px; }
+    .limites-photo { max-width: 240px; }
+    .last-action { justify-self: start; align-items: stretch; }
+  }
+  @media (max-width: 720px) {
+    /* Téléphone : la photo au-dessus du titre (commande 9), le cadrage 4:5 est servi par <source media>. */
+    .hero { gap: 28px; }
+  }
+  @media (max-width: 640px) {
+    .steps { grid-template-columns: 1fr; }
+    .age-list { grid-template-columns: 1fr 1fr; }
+    .age-t { font-size: var(--fs-sm); }
+  }
+  @media (max-width: 520px) {
+    .age-list { grid-template-columns: 1fr; }
+    .age-t { font-size: var(--fs-body); }
+  }
+</style>

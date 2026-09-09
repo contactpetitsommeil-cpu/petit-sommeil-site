@@ -1,0 +1,98 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import Button from '../components/Button.astro';
+import { articles } from '../data/photos';
+
+/* Du plus récent au plus ancien ; l'article `featured` est mis à la une. */
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const une = posts.find((p) => p.data.featured) ?? posts[0];
+const autres = posts.filter((p) => p.id !== une?.id);
+---
+<Base
+  title="Le coin conseils, sommeil de l’enfant"
+  description="Allaitement la nuit, portage, cododo, pleurs, post-partum : des repères bienveillants, sans injonction ni promesse, pour comprendre son sommeil."
+>
+  <PageHero
+    eyebrow="Le coin conseils"
+    title="Des repères pour t’y retrouver"
+    intro="Des repères concrets sur le sommeil de ton enfant, écrits sans jargon et sans promesse. Pour une réponse adaptée à ta situation, le questionnaire reste le plus rapide."
+  />
+
+  <section class="section">
+    <div class="container">
+      {posts.length === 0 ? (
+        <p class="vide">Pas encore d’article ici. En attendant, le questionnaire est le plus rapide pour une réponse personnalisée.</p>
+      ) : (
+        <>
+          {une && (
+            <div class="une">
+              <p class="badge">À la une</p>
+              <ArticleCard href={`/blog/${une.id}`} title={une.data.title} description={une.data.description}
+                category={une.data.category} date={une.data.date} readingTime={une.data.readingTime} image={articles[une.id]} featured />
+            </div>
+          )}
+          {autres.length > 0 && (
+            <div class="grid">
+              {autres.map((p) => (
+                <ArticleCard href={`/blog/${p.id}`} title={p.data.title} description={p.data.description}
+                  category={p.data.category} date={p.data.date} readingTime={p.data.readingTime} image={articles[p.id]} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  </section>
+
+  <section class="section news-section">
+    <div class="container news">
+      <div>
+        <h2>Recevoir les prochains conseils</h2>
+        <p>Un email quand je publie un nouvel article. Pas plus, et tu te désinscris en un clic.</p>
+      </div>
+      <form name="newsletter" method="POST" action="/newsletter-merci" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="newsletter" />
+        <p class="hp"><label>Ne rien remplir ici : <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="row">
+          <div class="fld">
+            <label for="n-email">Ton email</label>
+            <input type="email" id="n-email" name="email" placeholder="toi@exemple.fr" autocomplete="email" required />
+          </div>
+          <Button type="submit" variant="gold">Je m’inscris</Button>
+        </div>
+        <div class="consent">
+          <input type="checkbox" id="n-consent" name="consentement" value="oui" required />
+          <label for="n-consent">J’accepte de recevoir les conseils de Petit Sommeil par email et j’ai lu la <a href="/politique-confidentialite">politique de confidentialité</a>.</label>
+        </div>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .une { margin-bottom: 28px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: var(--fw-extrabold); letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy-900); background: var(--gold-400); padding: 6px 12px; border-radius: var(--radius-pill); margin: 0 0 14px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .vide { font-size: var(--fs-lead); }
+
+  .news-section { background: var(--cream-100); border-top: 1px solid var(--border); }
+  .news { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 40px; align-items: start; }
+  .news h2 { font-size: var(--fs-h3); margin-bottom: 8px; }
+  .news > div p { margin: 0; }
+  .hp { position: absolute; left: -9999px; }
+  .row { display: flex; gap: 12px; align-items: flex-end; margin-bottom: 14px; }
+  .fld { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .fld label { font-weight: var(--fw-bold); color: var(--text-strong); font-size: 15px; }
+  input[type="email"] { width: 100%; padding: 13px 15px; min-height: 50px; background: var(--surface-card); color: var(--text-body); border: 1.5px solid var(--border); border-radius: var(--radius-md); font-size: 16px; }
+  input[type="email"]:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; border-color: var(--gold-500); }
+  .consent { display: flex; gap: 12px; align-items: flex-start; }
+  .consent input { width: 22px; height: 22px; flex-shrink: 0; margin-top: 2px; accent-color: var(--gold-600); cursor: pointer; }
+  .consent label { font-size: var(--fs-sm); line-height: 1.5; cursor: pointer; }
+  .consent a { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } .news { grid-template-columns: 1fr; gap: 24px; } }
+  @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } .row { flex-direction: column; align-items: stretch; } }
+</style>

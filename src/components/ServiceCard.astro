@@ -1,0 +1,35 @@
+---
+import IconCircle from './IconCircle.astro';
+import type { Service } from '../data/services';
+interface Props { service: Service; href?: string; full?: boolean }
+const { service: s, href, full = false } = Astro.props;
+---
+<article class="card" id={full ? s.id : undefined}>
+  <div class="head">
+    <IconCircle name={s.icon} />
+    <div>
+      <h3>{s.title}</h3>
+      <span class="age">{s.age}</span>
+    </div>
+  </div>
+  <p>{full ? s.description : s.short}</p>
+  {full && <ul>{s.points.map((p) => <li>{p}</li>)}</ul>}
+  {href && <a class="more" href={href}>En savoir plus<span class="sr-only"> sur l’accompagnement {s.title}</span> →</a>}
+</article>
+<style>
+  .card {
+    background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 30px 28px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--shadow-sm);
+    transition: transform var(--dur-base) var(--ease-soft), box-shadow var(--dur-base) var(--ease-soft), border-color var(--dur-base);
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--gold-300); }
+  .head { display: flex; align-items: center; gap: 16px; }
+  h3 { font-size: 22px; line-height: 1.1; margin: 0 0 6px; }
+  .age { display: inline-block; font-size: 12px; font-weight: var(--fw-extrabold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy-800); background: var(--navy-100); padding: 4px 10px; border-radius: var(--radius-pill); }
+  p { margin: 0; }
+  ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: var(--fs-sm); }
+  ul li { padding-left: 22px; position: relative; }
+  ul li::before { content: ''; position: absolute; left: 0; top: 9px; width: 10px; height: 6px; border-left: 2px solid var(--gold-500); border-bottom: 2px solid var(--gold-500); transform: rotate(-45deg); }
+  .more { margin-top: auto; font-size: var(--fs-sm); font-weight: var(--fw-bold); color: var(--navy-900); text-decoration: none; }
+  .more:hover { color: var(--accent-strong); }
+</style>

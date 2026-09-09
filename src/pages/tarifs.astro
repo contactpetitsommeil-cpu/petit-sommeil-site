@@ -1,0 +1,275 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Button from '../components/Button.astro';
+import FaqItem from '../components/FaqItem.astro';
+import CTABand from '../components/CTABand.astro';
+import IconCircle from '../components/IconCircle.astro';
+import { plans, pricingNote, LAUNCH_END_ISO, launchIsLive } from '../data/pricing';
+import { faqShort } from '../data/faq';
+import { icons } from '../data/icons';
+
+/** Bandeau et prix barrés au moment du build. Le script inline en bas de page prend le relais côté navigateur. */
+const showLaunch = launchIsLive();
+
+const parcours = [
+  { icon: 'book', title: 'Questionnaire et planning', text: 'Après ta demande, tu reçois le questionnaire et le planning de sommeil sur 7 jours à remplir avant le rendez-vous.' },
+  { icon: 'video', title: 'La consultation', text: 'On se voit en visio ou à domicile, 1h30. Bilan, écoute, plan d’action construit avec toi.' },
+  { icon: 'moon', title: 'Le plan d’action', text: 'Tu reçois ton plan écrit sous 48h maximum : problématique, repères d’âge, et le tableau de ce qu’on a décidé ensemble.' },
+] as const;
+---
+<Base
+  title="Tarifs, consultation sommeil bébé et enfant"
+  description="Consultation dès 65 €, offre de lancement jusqu’au 30 septembre 2026. Contact quotidien durant l’accompagnement, en visio ou à domicile près de Saint-Malo."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'ItemList',
+      itemListElement: plans.map((p, i) => ({
+        '@type': 'Offer', position: i + 1, name: p.name,
+        price: p.price.replace(/[^\d]/g, '') || '0', priceCurrency: 'EUR', description: p.desc,
+      })),
+    })} />
+  </Fragment>
+
+  <PageHero
+    eyebrow="Tarifs"
+    title="Des formules claires, à ton rythme"
+    intro="Une consultation ponctuelle ou un accompagnement quotidien pendant 15 jours ou un mois. Tu choisis ce qui te correspond, tout commence par le questionnaire."
+  />
+
+  {showLaunch && (
+    <aside class="launch container" data-launch aria-labelledby="launch-title">
+      <div class="launch-inner">
+        <span class="launch-badge">Tarifs de lancement</span>
+        <p id="launch-title" class="launch-text">
+          Pour toute prise de rendez-vous <strong>jusqu’au 30&nbsp;septembre 2026</strong>. Le tarif s’applique aussi aux séances qui se tiennent en octobre.
+        </p>
+      </div>
+    </aside>
+  )}
+
+  <section class="section">
+    <div class="container">
+      <div class="plans">
+        {plans.map((p) => (
+          <article class:list={['plan', p.featured && 'featured on-dark']} id={p.id}>
+            {p.featured && <span class="badge">Le plus choisi</span>}
+            <h2>{p.name}</h2>
+            <p class="unit">{p.unit}</p>
+            <p class="price">
+              {p.priceLaunch && showLaunch ? (
+                <>
+                  <span class="price-launch" data-launch-price>{p.priceLaunch}</span>
+                  <span class="price-old" data-full-price aria-label={`prix hors lancement, ${p.price}`}>{p.price}</span>
+                </>
+              ) : (
+                <span data-full-price>{p.price}</span>
+              )}
+            </p>
+            <p class="desc">{p.desc}</p>
+            <ul>
+              {p.features.map((f) => <li><Fragment set:html={icons.check} />{f}</li>)}
+            </ul>
+            <Button href={p.href} variant={p.variant} fullWidth>{p.cta}</Button>
+          </article>
+        ))}
+      </div>
+      <p class="note">{pricingNote}</p>
+    </div>
+  </section>
+
+  <!-- Ce qui se passe après la consultation -->
+  <section class="section parcours-section">
+    <div class="container">
+      <SectionHeading eyebrow="Le parcours" title="Comment on avance ensemble" align="center" />
+      <ol class="parcours">
+        {parcours.map((p, i) => (
+          <li>
+            <span class="parcours-step">
+              <IconCircle name={p.icon} size={48} />
+              <span class="parcours-n">{i + 1}</span>
+            </span>
+            <div>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p class="parcours-note">Un rendez-vous se fixe en général dans les deux semaines. Ce délai n’est pas du retard : il te laisse le temps de remplir le planning de sommeil, qui me permet de comprendre les nuits de ton enfant avant qu’on se parle. Tu peux déjà <a href="/planning-de-sommeil">le télécharger et commencer</a>.</p>
+    </div>
+  </section>
+
+  <!-- Déplacement et horaires -->
+  <section class="section pratique">
+    <div class="container grid-2">
+      <div class="card">
+        <p class="eyebrow">Où on se voit</p>
+        <h2>Visio partout, domicile autour de Saint-Malo</h2>
+        <p>Les consultations se font en visio partout en France, et en présentiel autour de Saint-Malo : Dinard, Dol-de-Bretagne, Cancale, Saint-Méloir-des-Ondes, Plerguer, Miniac et Le Tronchet.</p>
+        <p>Au-delà de 20&nbsp;km de Saint-Malo, un forfait déplacement s’ajoute&nbsp;: <strong>1&nbsp;€ par kilomètre supplémentaire</strong>. Une manière de dire oui aux familles un peu plus loin, sans faire monter le prix pour tout le monde.</p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Horaires</p>
+        <h2>Quand on peut se parler</h2>
+        <ul class="hours">
+          <li><strong>Consultations</strong> : lundi au vendredi, 9h à 12h et 13h30 à 17h.</li>
+          <li><strong>Pendant un accompagnement</strong>, je suis joignable du lundi au vendredi, de 9h à 21h. Les jours fériés, de 9h à 12h.</li>
+          <li>Le <strong>samedi</strong>, on peut s’arranger si tu as besoin d’un coup de main. Le <strong>dimanche</strong>, je coupe.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section faq-section">
+    <div class="container narrow">
+      <SectionHeading eyebrow="Questions fréquentes" title="Avant de réserver" />
+      <div class="faq-list">{faqShort.map((f, i) => <FaqItem {...f} open={i === 0} />)}</div>
+      <div class="faq-more">
+        <Button href="/faq" variant="ghost" size="sm">
+          Voir toutes les questions
+          <Fragment slot="icon-right" set:html={icons.arrowRight} />
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <CTABand
+    title="Une formule en tête ?"
+    text="Tout commence par le questionnaire. Je te réponds sous 48h."
+  />
+
+  <!-- Retire le bandeau et les prix de lancement dès le 1er octobre, même sans redéploiement. -->
+  <script is:inline define:vars={{ LAUNCH_END_ISO }}>
+    (function () {
+      const now = new Date();
+      if (now < new Date(LAUNCH_END_ISO)) return;
+      document.querySelectorAll('[data-launch]').forEach((el) => el.remove());
+      document.querySelectorAll('[data-launch-price]').forEach((el) => el.remove());
+      document.querySelectorAll('[data-full-price]').forEach((el) => {
+        el.classList.remove('price-old');
+        el.removeAttribute('aria-label');
+        el.classList.add('price-current');
+      });
+    })();
+  </script>
+</Base>
+
+<style>
+  /* Bandeau de lancement */
+  .launch { padding-top: 24px; }
+  .launch-inner {
+    display: flex; align-items: center; gap: 20px;
+    background: var(--surface-inset); border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg); padding: 18px 24px;
+  }
+  .launch-badge {
+    flex-shrink: 0;
+    font-size: 11px; font-weight: var(--fw-extrabold); letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--navy-900); background: var(--gold-400);
+    padding: 6px 12px; border-radius: var(--radius-pill);
+  }
+  .launch-text { margin: 0; font-size: var(--fs-sm); color: var(--text-body); }
+  .launch-text strong { color: var(--text-strong); font-weight: var(--fw-bold); }
+  @media (max-width: 620px) {
+    .launch-inner { flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 18px; }
+  }
+
+  /* Cartes tarifaires */
+  .plans { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
+  .plan {
+    position: relative;
+    background: var(--surface-card); border: 1px solid var(--border);
+    border-radius: var(--radius-xl); padding: 32px 26px 30px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .featured {
+    background: var(--navy-900); border-color: var(--navy-900);
+    color: var(--text-on-dark); box-shadow: var(--shadow-navy);
+  }
+  .featured h2 { color: var(--text-on-dark); }
+  .badge {
+    position: absolute; top: -13px; left: 26px;
+    font-size: 11px; font-weight: var(--fw-extrabold); letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--navy-900); background: var(--gold-400);
+    padding: 6px 12px; border-radius: var(--radius-pill);
+  }
+  h2 { font-size: 22px; margin: 0; line-height: 1.25; }
+  .unit { font-size: var(--fs-sm); color: var(--text-muted); margin: 0; }
+  .featured .unit, .featured .desc, .featured li { color: var(--text-on-dark-muted); }
+
+  .price {
+    font-family: var(--font-display); font-size: 44px; font-weight: var(--fw-bold);
+    color: var(--text-strong); margin: 14px 0 4px; line-height: 1;
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  }
+  .featured .price { color: var(--gold-400); }
+  .price-launch { color: inherit; }
+  .price-old {
+    font-family: var(--font-sans); font-size: 15px; font-weight: var(--fw-semibold);
+    color: var(--text-muted); text-decoration: line-through; text-decoration-thickness: 1px;
+  }
+  .featured .price-old { color: var(--text-on-dark-muted); }
+
+  .desc { margin: 0 0 14px; }
+  ul { list-style: none; margin: 0 0 26px; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: var(--fs-sm); }
+  li { display: flex; gap: 10px; align-items: flex-start; }
+  li :global(svg) { width: 18px; height: 18px; flex-shrink: 0; color: var(--gold-600); margin-top: 2px; }
+  .featured li :global(svg) { color: var(--gold-400); }
+  .plan :global(.btn) { margin-top: auto; }
+  .note { text-align: center; font-size: var(--fs-sm); color: var(--text-muted); margin: 28px 0 0; }
+
+  /* Parcours */
+  .parcours-section { background: var(--cream-100); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .parcours { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .parcours li {
+    background: var(--surface-card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .parcours-step { position: relative; align-self: flex-start; }
+  .parcours-n {
+    position: absolute; top: -6px; right: -6px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--gold-500); color: var(--navy-900);
+    font-size: 12px; font-weight: var(--fw-extrabold);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .parcours h3 { font-size: 19px; margin: 0 0 6px; }
+  .parcours p { margin: 0; font-size: var(--fs-sm); color: var(--text-body); }
+  .parcours-note { max-width: 780px; margin: 28px auto 0; text-align: center; color: var(--text-body); }
+
+  /* Déplacement + horaires */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card {
+    background: var(--surface-card); border: 1px solid var(--border);
+    border-radius: var(--radius-xl); padding: 34px;
+  }
+  .card h2 { font-size: var(--fs-h3); margin: 6px 0 14px; }
+  .card p { margin: 0 0 12px; }
+  .card p:last-child { margin-bottom: 0; }
+  .hours { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; font-size: 15px; color: var(--text-body); }
+  .hours li { display: block; padding: 0; }
+  .hours strong { color: var(--text-strong); font-weight: var(--fw-bold); }
+
+  /* FAQ + reste */
+  .faq-section { background: var(--cream-100); border-top: 1px solid var(--border); }
+  .narrow { max-width: 760px; }
+  .faq-list { display: flex; flex-direction: column; gap: 12px; }
+  .faq-more { margin-top: 20px; }
+
+  @media (max-width: 1100px) {
+    .plans { grid-template-columns: 1fr 1fr; }
+    .featured { grid-row: 1; }
+  }
+  @media (max-width: 900px) {
+    .parcours { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .plans { grid-template-columns: 1fr; }
+    .featured { grid-row: auto; order: -1; }
+  }
+</style>

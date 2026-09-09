@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import FaqItem from '../components/FaqItem.astro';
+import IconCircle from '../components/IconCircle.astro';
+import CTABand from '../components/CTABand.astro';
+import { faq } from '../data/faq';
+import { icons, type IconName } from '../data/icons';
+import { site } from '../data/site';
+
+/** Une icône par thème, pour relier l’index et les sections. */
+const groupIcon: Record<string, IconName> = {
+  consultations: 'video',
+  resultats: 'heart',
+  organisation: 'shield',
+};
+const iconOf = (id: string): IconName => groupIcon[id] ?? 'moon';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.flatMap((g) =>
+    g.items.map((it) => ({
+      '@type': 'Question',
+      name: it.q,
+      acceptedAnswer: { '@type': 'Answer', text: it.a },
+    })),
+  ),
+};
+---
+<Base
+  title="FAQ sommeil bébé et enfant, tes questions"
+  description="Déroulé d’une consultation, accompagnement au quotidien, résultats, délais, paiement, annulation : mes réponses aux questions que les familles me posent."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <PageHero
+    eyebrow="Questions fréquentes"
+    title="Tes questions, mes réponses"
+    intro="Les questions que les familles me posent le plus souvent. Ce sont mes vraies réponses, dans mes mots."
+  />
+
+  <div class="wrap">
+    <div class="container layout">
+      <nav class="index" aria-label="Thèmes des questions">
+        <p class="index-title">Les thèmes</p>
+        <ul>
+          {faq.map((g) => (
+            <li>
+              <a href={`#${g.id}`}>
+                <span class="index-icon" set:html={icons[iconOf(g.id)]} />
+                <span class="index-label">{g.heading}</span>
+                <span class="count">{g.items.length}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="groups">
+        {faq.map((g, gi) => (
+          <section class="grp" id={g.id} aria-labelledby={`${g.id}-titre`}>
+            <div class="grp-head">
+              <IconCircle name={iconOf(g.id)} size={46} />
+              <h2 id={`${g.id}-titre`}>{g.heading}</h2>
+            </div>
+            <div class="list">
+              {g.items.map((it, i) => <FaqItem q={it.q} a={it.a} open={gi === 0 && i === 0} />)}
+            </div>
+          </section>
+        ))}
+
+        <aside class="help" aria-labelledby="help-titre">
+          <IconCircle name="moonHeart" size={56} />
+          <h2 id="help-titre">Tu ne trouves pas ta réponse&nbsp;?</h2>
+          <p>Écris-moi. Chaque situation est différente et aucune question n’est trop petite. Je te réponds personnellement sous 48h.</p>
+          <Button href="/contact" variant="secondary">Écris-moi</Button>
+          <p class="direct">Ou directement&nbsp;: <a href={`mailto:${site.email}`}>{site.email}</a></p>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <CTABand
+    title="Chaque famille a ses propres questions"
+    text="Le questionnaire me permet de comprendre la tienne. Cinq minutes, et je te réponds sous 48h."
+  />
+</Base>
+
+<style>
+  .wrap { padding-block: var(--section-y); }
+  .layout { display: grid; grid-template-columns: 250px 1fr; gap: 64px; align-items: start; }
+
+  /* Index des thèmes */
+  .index { position: sticky; top: 96px; background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 16px; }
+  .index-title { font-size: var(--fs-eyebrow); font-weight: var(--fw-extrabold); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-body); margin: 0 0 10px; padding-inline: 12px; }
+  .index ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .index a {
+    display: flex; align-items: center; gap: 10px; padding: 13px 12px;
+    border-radius: var(--radius-md); text-decoration: none;
+    font-size: var(--fs-sm); font-weight: var(--fw-semibold); line-height: 1.35; color: var(--text-body);
+    transition: background var(--dur-base) var(--ease-soft), color var(--dur-base) var(--ease-soft);
+  }
+  .index a:hover { background: var(--surface-inset); color: var(--text-strong); }
+  .index-icon { display: inline-flex; flex-shrink: 0; color: var(--gold-600); }
+  .index-icon :global(svg) { width: 17px; height: 17px; }
+  .index-label { flex: 1; }
+  .count { flex-shrink: 0; font-size: var(--fs-xs); font-weight: var(--fw-bold); color: var(--text-body); font-variant-numeric: tabular-nums; }
+
+  /* Groupes de questions */
+  .grp { scroll-margin-top: 96px; }
+  .grp + .grp { margin-top: 56px; }
+  .grp-head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .grp-head h2 { font-size: var(--fs-h3); margin: 0; }
+  .list { display: flex; flex-direction: column; gap: 12px; }
+
+  /* Bloc d’aide */
+  .help { margin-top: 64px; background: var(--surface-inset); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 40px; text-align: center; }
+  .help :global(.ic) { margin: 0 auto 18px; }
+  .help h2 { font-size: var(--fs-h3); margin-bottom: 10px; }
+  .help p { max-width: 46ch; margin-inline: auto; }
+  .help p:not(.direct) { margin-bottom: 24px; }
+  .direct { font-size: var(--fs-sm); color: var(--text-body); margin: 18px 0 0; }
+  .direct a { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; gap: 36px; }
+    .index { position: static; }
+    .index ul { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  }
+  @media (max-width: 560px) {
+    .index ul { grid-template-columns: 1fr; }
+    .grp-head { gap: 12px; }
+    .help { padding: 32px 22px; }
+  }
+</style>

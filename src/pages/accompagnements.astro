@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import IconCircle from '../components/IconCircle.astro';
+import CTABand from '../components/CTABand.astro';
+import Scene from '../components/Scene.astro';
+import Photo from '../components/Photo.astro';
+import { services, parcours } from '../data/services';
+/* Les cinq tranches, leurs noms, résumés et points viennent de Sarah (data/services.ts). */
+---
+<Base
+  title="Accompagnement sommeil bébé et enfant"
+  description="Nouveau-né, bébé ou enfant : un accompagnement sommeil sur mesure, en douceur, en visio ou à domicile. Tout commence par un questionnaire de 5 min."
+>
+  <!-- En-tête en scène (règle hybride du 08/09) : Sarah en visio reste à l'écran, la carte crème glisse à sa gauche. -->
+  <Scene id="05-accompagnements" carte="gauche" sujet="droite" priority labelledby="titre">
+    <p class="eyebrow">Mes accompagnements</p>
+    <h1 id="titre">Un accompagnement pour chaque âge</h1>
+    <p class="lead">Du nouveau-né à l’enfant de 6 ans, je propose un suivi sur mesure, bienveillant et sans culpabilité, adapté à ta famille et à ta façon de faire.</p>
+  </Scene>
+
+  <section class="section">
+    <div class="container offers">
+      {services.map((s, i) => (
+        <article class:list={['offer', i % 2 === 1 && 'flip']} id={s.id}>
+          <div class="offer-visual">
+            <!-- Une photo par tranche (08/09), voir data/services.ts et data/photos.ts. -->
+            <Photo id={s.photo} desktop="carte" widths={[260, 400, 520]} sizes="(max-width: 800px) calc(100vw - 40px), 260px" />
+          </div>
+          <div class="offer-body">
+            <h2><span class="tranche">{s.title}<span class="sr-only">, </span></span>{s.age}</h2>
+            <p class="lead">{s.description}</p>
+            <ul>{s.points.map((p) => <li>{p}</li>)}</ul>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section steps-section">
+    <div class="container">
+      <SectionHeading eyebrow="Comment ça se passe" title="Cinq étapes, à ton rythme" />
+      <ol class="steps">
+        {parcours.map((st, i) => (
+          <li>
+            <div class="step-head"><IconCircle name={st.icon} /><span class="n">{String(i + 1).padStart(2, '0')}</span></div>
+            <h3>{st.title}</h3>
+            <p>{st.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <CTABand />
+</Base>
+
+<style>
+  .offers { display: flex; flex-direction: column; gap: 24px; }
+  .offer { display: grid; grid-template-columns: 260px 1fr; background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; scroll-margin-top: 90px; }
+  .flip { grid-template-columns: 1fr 260px; }
+  .flip .offer-visual { order: 2; }
+  .offer-visual { background: var(--surface-inset); }
+  .offer-visual :global(picture), .offer-visual :global(img) { width: 100%; height: 100%; }
+  .offer-visual :global(img) { object-fit: cover; }
+  .offer-body { padding: 40px 44px; }
+  .offer-body h2 { margin-bottom: 12px; }
+  .tranche { display: block; width: fit-content; font-family: var(--font-sans); font-size: 12px; font-weight: var(--fw-extrabold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy-800); background: var(--navy-100); padding: 5px 12px; border-radius: var(--radius-pill); margin-bottom: 12px; }
+  .offer-body .lead { color: var(--text-body); max-width: 62ch; }
+  ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .offer-body li { padding-left: 28px; position: relative; }
+  .offer-body li::before { content: ''; position: absolute; left: 2px; top: 8px; width: 12px; height: 7px; border-left: 2px solid var(--gold-500); border-bottom: 2px solid var(--gold-500); transform: rotate(-45deg); }
+
+  .steps-section { background: var(--cream-100); border-top: 1px solid var(--border); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  @media (max-width: 1000px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+  .steps li { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; }
+  .step-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .n { font-family: var(--font-display); font-size: 28px; font-weight: var(--fw-bold); color: var(--accent-strong); }
+  .steps h3 { font-size: 20px; margin-bottom: 8px; }
+  .steps p { margin: 0; font-size: var(--fs-sm); }
+
+  @media (max-width: 800px) {
+    .offer, .flip { grid-template-columns: 1fr; }
+    .flip .offer-visual { order: 0; }
+    .offer-visual { aspect-ratio: 4 / 3; }
+    .offer-body { padding: 24px; }
+    .steps { grid-template-columns: 1fr; }
+  }
+</style>

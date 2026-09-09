@@ -1,0 +1,166 @@
+<!-- ARCHIVE — écran d'entrée (splash) retiré du site à la demande de la cliente.
+     Extrait de l'export Claude Design. Non utilisé en production. -->
+<div id="splash">
+
+  <!-- Stars -->
+  <canvas id="stars"></canvas>
+
+  <!-- Moon -->
+  <div id="moon-wrap">
+    <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="#F1E2C2" stop-opacity="0.38"/>
+          <stop offset="45%"  stop-color="#D7BC8A" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#C7A36A" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="moonFill" cx="38%" cy="35%" r="62%">
+          <stop offset="0%"   stop-color="#FCF9F3"/>
+          <stop offset="40%"  stop-color="#F2EADC"/>
+          <stop offset="100%" stop-color="#CFC4AC"/>
+        </radialGradient>
+        <mask id="crescentMask">
+          <circle cx="110" cy="110" r="78" fill="white"/>
+          <circle cx="148" cy="90"  r="68" fill="black"/>
+        </mask>
+        <filter id="moonEdge" x="-15%" y="-15%" width="130%" height="130%">
+          <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#16294C" flood-opacity="0.55"/>
+        </filter>
+      </defs>
+      <!-- Outer glow -->
+      <circle cx="110" cy="110" r="105" fill="url(#glowGrad)"/>
+      <!-- Crescent with dark edge shadow for contrast -->
+      <g filter="url(#moonEdge)">
+        <circle cx="110" cy="110" r="78" fill="url(#moonFill)" mask="url(#crescentMask)"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Cloud LEFT — 4 large overlapping spheres, no flat base -->
+  <div id="cloud-left">
+    <svg width="54vw" viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible">
+      <defs>
+        <radialGradient id="cL1" cx="42%" cy="33%" r="56%">
+          <stop offset="0%"   stop-color="#FCF9F3"/>
+          <stop offset="100%" stop-color="#CBC2AE"/>
+        </radialGradient>
+        <radialGradient id="cL2" cx="44%" cy="30%" r="58%">
+          <stop offset="0%"   stop-color="#F8F3EA"/>
+          <stop offset="100%" stop-color="#C6BCA8"/>
+        </radialGradient>
+        <radialGradient id="cL3" cx="46%" cy="36%" r="54%">
+          <stop offset="0%"   stop-color="#F2EADC"/>
+          <stop offset="100%" stop-color="#C0B6A2"/>
+        </radialGradient>
+        <radialGradient id="cL4" cx="50%" cy="34%" r="56%">
+          <stop offset="0%"   stop-color="#F5EFE3"/>
+          <stop offset="100%" stop-color="#C7BDA9"/>
+        </radialGradient>
+        <filter id="cShadowL" x="-10%" y="-10%" width="130%" height="140%">
+          <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F1D39" flood-opacity="0.34"/>
+        </filter>
+      </defs>
+      <g filter="url(#cShadowL)">
+        <circle cx="70"  cy="158" r="88"  fill="url(#cL1)"/>
+        <circle cx="196" cy="132" r="108" fill="url(#cL2)"/>
+        <circle cx="332" cy="148" r="93"  fill="url(#cL3)"/>
+        <circle cx="458" cy="162" r="80"  fill="url(#cL4)"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Cloud RIGHT — mirrored so fat side meets left cloud at center -->
+  <div id="cloud-right">
+    <svg width="54vw" viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible">
+      <defs>
+        <radialGradient id="cR1" cx="42%" cy="33%" r="56%">
+          <stop offset="0%"   stop-color="#FCF9F3"/>
+          <stop offset="100%" stop-color="#CBC2AE"/>
+        </radialGradient>
+        <radialGradient id="cR2" cx="44%" cy="30%" r="58%">
+          <stop offset="0%"   stop-color="#F8F3EA"/>
+          <stop offset="100%" stop-color="#C6BCA8"/>
+        </radialGradient>
+        <radialGradient id="cR3" cx="46%" cy="36%" r="54%">
+          <stop offset="0%"   stop-color="#F2EADC"/>
+          <stop offset="100%" stop-color="#C0B6A2"/>
+        </radialGradient>
+        <radialGradient id="cR4" cx="50%" cy="34%" r="56%">
+          <stop offset="0%"   stop-color="#F5EFE3"/>
+          <stop offset="100%" stop-color="#C7BDA9"/>
+        </radialGradient>
+        <filter id="cShadowR" x="-10%" y="-10%" width="130%" height="140%">
+          <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F1D39" flood-opacity="0.34"/>
+        </filter>
+      </defs>
+      <!-- scale(-1,1) mirrors it so left side of this SVG is the "fat" side meeting the other cloud -->
+      <g filter="url(#cShadowR)" transform="scale(-1,1) translate(-520,0)">
+        <circle cx="70"  cy="158" r="88"  fill="url(#cR1)"/>
+        <circle cx="196" cy="132" r="108" fill="url(#cR2)"/>
+        <circle cx="332" cy="148" r="93"  fill="url(#cR3)"/>
+        <circle cx="458" cy="162" r="80"  fill="url(#cR4)"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Brand content -->
+  <div id="content">
+    <!-- Mother + baby line icon -->
+    <svg class="brand-icon" viewBox="0 0 52 52" fill="none" stroke="#D7BC8A" stroke-width="1.35"
+         stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <!-- baby: small head + curled body -->
+      <circle cx="33" cy="11" r="4.5"/>
+      <path d="M33 15.5 C33 21 27 23 25 27"/>
+      <!-- mother: larger head -->
+      <circle cx="18" cy="10.5" r="5.5"/>
+      <!-- mother body -->
+      <path d="M12.5 22 C12.5 16.5 23.5 16.5 23.5 22 L23.5 38 C23.5 40.2 21.5 42 18 42 C14.5 42 12.5 40.2 12.5 38 Z"/>
+      <!-- arm cradling baby -->
+      <path d="M23.5 25 C27.5 22.5 34.5 22.5 36.5 26.5 C38.5 30.5 34 34.5 30 32.5 C27 31 23.5 28 23.5 25"/>
+    </svg>
+
+    <div class="brand-petit">Petit</div>
+    <div class="brand-sommeil">Sommeil</div>
+    <div class="brand-sub">
+      Conseillère en sommeil pour bébé et enfant<br>
+      Lactation
+    </div>
+
+    <button class="btn-entrer" onclick="this.textContent='…'">Entrer</button>
+    <div class="tagline">Bien dormir, ça s'apprend.</div>
+  </div>
+
+</div>
+<script>
+function startStars(root){
+    const canvas = root.querySelector('#stars');
+    if(!canvas) return ()=>{};
+    const ctx = canvas.getContext('2d');
+    let raf, running = true;
+    function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    const COUNT = 160, stars = [];
+    function mk(ry){ return { x:Math.random()*canvas.width, y: ry?Math.random()*canvas.height*0.68:-Math.random()*20, size:Math.random()*0.85+0.18, speed:Math.random()*0.30+0.10, alpha:Math.random()*0.5+0.22, warm:Math.random()>0.48, phase:Math.random()*Math.PI*2 }; }
+    for(let i=0;i<COUNT;i++) stars.push(mk(true));
+    let last = performance.now();
+    function draw(now){
+      if(!running) return;
+      const dt = Math.min(now-last,50); last = now;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(const s of stars){
+        s.y += s.speed*(dt/16); s.phase += 0.013;
+        if(s.y > canvas.height*0.72){ Object.assign(s, mk(false)); continue; }
+        const tw = 0.82+0.18*Math.sin(s.phase), a = s.alpha*tw;
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
+        ctx.fillStyle = s.warm?`rgba(231,212,174,${a})`:`rgba(199,210,232,${a})`; ctx.fill();
+        if(s.size>0.65){ const r=s.size*3.2, g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,r);
+          g.addColorStop(0, s.warm?`rgba(231,212,174,${a*0.20})`:`rgba(185,194,212,${a*0.16})`);
+          g.addColorStop(1,'rgba(0,0,0,0)'); ctx.beginPath(); ctx.arc(s.x,s.y,r,0,Math.PI*2); ctx.fillStyle=g; ctx.fill(); }
+      }
+      raf = requestAnimationFrame(draw);
+    }
+    raf = requestAnimationFrame(draw);
+    return ()=>{ running=false; cancelAnimationFrame(raf); window.removeEventListener('resize', resize); };
+  }
+</script>

@@ -1,0 +1,116 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CTABand from '../../components/CTABand.astro';
+import Button from '../../components/Button.astro';
+import { site } from '../../data/site';
+import Photo from '../../components/Photo.astro';
+import { articles } from '../../data/photos';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const mots = post.body ? post.body.trim().split(/\s+/).length : 0;
+const lecture = post.data.readingTime ?? `${Math.max(1, Math.round(mots / 200))} min`;
+const jour = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(post.data.date);
+const iso = post.data.date.toISOString().slice(0, 10);
+const sommaire = headings.filter((h) => h.depth === 2);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: iso,
+  articleSection: post.data.category,
+  author: { '@type': 'Person', name: site.owner, jobTitle: site.role },
+  publisher: { '@type': 'Organization', name: site.name, url: site.url },
+  mainEntityOfPage: `${site.url}/blog/${post.id}`,
+};
+---
+<Base title={post.data.seoTitle ?? post.data.title} description={post.data.description}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </Fragment>
+
+  <article>
+    <header class="head">
+      <div class="container inner">
+        <nav class="fil" aria-label="Fil d’Ariane">
+          <a href="/blog">Le coin conseils</a> <span aria-hidden="true">›</span> <span>{post.data.category}</span>
+        </nav>
+        <h1>{post.data.title}</h1>
+        {post.data.chapo && <p class="lead chapo">{post.data.chapo}</p>}
+        <p class="meta">
+          <time datetime={iso}>{jour}</time>
+          <span>{lecture} de lecture</span>
+        </p>
+        {articles[post.id] && (
+          <figure class="cover"><Photo id={articles[post.id]} desktop="carte" widths={[760, 1200]} sizes="(max-width: 800px) calc(100vw - 40px), 760px" /></figure>
+        )}
+      </div>
+    </header>
+
+    <div class="container inner body">
+      {sommaire.length > 1 && (
+        <nav class="toc" aria-label="Sommaire de l’article">
+          <p class="toc-t">Dans cet article</p>
+          <ol>{sommaire.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        </nav>
+      )}
+
+      <div class="prose"><Content /></div>
+
+      <p class="garde">Ces conseils sont d’ordre général et ne remplacent pas un avis médical. En cas de doute sur la santé de ton enfant, parles-en à ton médecin ou à ton pédiatre.</p>
+
+      <div class="retour"><Button href="/blog" variant="secondary" size="sm">← Tous les articles</Button></div>
+    </div>
+  </article>
+
+  <CTABand
+    title="Et pour ton enfant, concrètement ?"
+    text="Le questionnaire me permet de partir de ta situation plutôt que de généralités. Cinq minutes."
+  />
+</Base>
+
+<style>
+  .cover { margin: 28px 0 0; aspect-ratio: 2 / 1; border-radius: var(--radius-xl); overflow: hidden; background: var(--surface-inset); }
+  .cover :global(picture), .cover :global(img) { width: 100%; height: 100%; }
+  .cover :global(img) { object-fit: cover; }
+  .head { padding: 48px 0 32px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, var(--cream-100), var(--cream-50)); }
+  .inner { max-width: 720px; }
+  .fil { font-size: var(--fs-sm); color: var(--text-body); margin-bottom: 16px; }
+  .fil a { color: var(--accent-strong); font-weight: var(--fw-semibold); text-decoration: none; }
+  .fil a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .fil span[aria-hidden] { margin: 0 6px; color: var(--text-body); }
+  h1 { margin-bottom: 14px; }
+  .chapo { color: var(--text-strong); margin: 0 0 16px; max-width: 60ch; }
+  .meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: var(--fs-sm); color: var(--text-body); margin: 0; }
+  .meta time + span::before { content: '·'; margin-right: 14px; color: var(--ink-300); }
+
+  .body { padding-block: 40px var(--section-y); } /* padding-inline : celui du .container */
+  .toc { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 26px; margin-bottom: 36px; }
+  .toc-t { font-size: var(--fs-eyebrow); font-weight: var(--fw-extrabold); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-body); margin: 0 0 10px; }
+  .toc ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px; font-size: var(--fs-sm); }
+  .toc a { color: var(--text-body); text-decoration: none; }
+  .toc a:hover { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; }
+
+  .prose :global(h2) { font-size: var(--fs-h3); margin: 40px 0 14px; scroll-margin-top: 96px; }
+  .prose :global(h2:first-child) { margin-top: 0; }
+  .prose :global(p) { margin: 0 0 18px; font-size: 17px; line-height: 1.7; }
+  .prose :global(strong) { color: var(--text-strong); font-weight: var(--fw-bold); }
+  .prose :global(ul) { margin: 0 0 18px; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+  /* Liens dans le corps : soulignés, marine, anneau de focus global. Le `tel:` et le lien externe passent par ici. */
+  .prose :global(a) { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1.5px; }
+  .prose :global(a:hover) { color: var(--navy-700); text-decoration-thickness: 2px; }
+  /* Signature de Sarah, dernière ligne de chaque article, rendue comme dans le pied de page. */
+  .prose :global(.signature) { margin: 28px 0 0; font-family: var(--font-display); font-style: italic; color: var(--ink-500); }
+
+  .garde { margin: 40px 0 0; padding: 18px 22px; background: var(--surface-inset); border-radius: var(--radius-md); font-size: var(--fs-sm); color: var(--text-body); }
+  .retour { margin-top: 32px; }
+</style>

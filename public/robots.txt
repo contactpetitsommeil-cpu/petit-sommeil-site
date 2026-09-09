@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://petitsommeil.fr/sitemap-index.xml

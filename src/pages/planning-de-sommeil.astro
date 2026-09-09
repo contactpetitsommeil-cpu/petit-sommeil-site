@@ -1,0 +1,215 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import IconCircle from '../components/IconCircle.astro';
+import Photo from '../components/Photo.astro';
+import { site } from '../data/site';
+
+/* Commande 4, docs/reco-telechargement.md : le formulaire ne déclenche aucun envoi.
+   Il enregistre l'adresse (Netlify Forms, formulaire « planning ») et redirige vers
+   /planning-merci, qui porte les deux liens de téléchargement. Zéro outil tiers. */
+
+/* Légende alignée sur le gabarit PDF (livrables/planning-de-sommeil/build.py, version du 02/09) :
+   trait, triangle, croix, point. Les formes se lisent même sans couleur. */
+const legende = [
+  { swatch: 'trait', label: 'Sommeil', how: 'un trait sur toute la plage' },
+  { swatch: 'triangle', label: 'Endormissement', how: 'un triangle à l’heure où il s’endort' },
+  { swatch: 'croix', label: 'Réveil', how: 'une croix à l’heure du réveil' },
+  { swatch: 'point', label: 'Repas', how: 'un point, la quantité à côté si tu veux' },
+  { swatch: 'vide', label: 'Éveil', how: 'on ne met rien' },
+];
+---
+<Base
+  title="Planning de sommeil à imprimer, gratuit"
+  description="Le planning de sommeil sur 7 jours que je donne aux familles, en deux versions, 0-2 ans et 2-6 ans. Gratuit, à imprimer, un stylo suffit. Laisse ton email."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'WebPage',
+      name: 'Planning de sommeil à imprimer', url: `${site.url}/planning-de-sommeil`,
+      description: 'Planning de sommeil sur 7 jours, gratuit, en deux versions (0-2 ans, 2-6 ans), au format A4 paysage.',
+      publisher: { '@type': 'Organization', name: site.name, url: site.url },
+    })} />
+  </Fragment>
+
+  <PageHero
+    eyebrow="À imprimer"
+    title="Le planning de sommeil de ton enfant"
+    intro="Sept jours, une feuille, un stylo. C’est le document que je donne à toutes les familles avant notre rendez-vous, et tu peux l’avoir tout de suite. Il est gratuit."
+  />
+
+  <section class="section form-section">
+    <div class="container grid">
+      <div class="card form-card">
+        <h2>Où je t’envoie le lien&nbsp;?</h2>
+        <p class="form-intro">Laisse ton prénom et ton email. Le téléchargement s’ouvre juste après, pas besoin d’attendre un mail.</p>
+
+        <form
+          name="planning"
+          method="POST"
+          action="/planning-merci"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="planning" />
+          <p class="hp">
+            <label>Ne rien remplir ici : <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
+
+          <div class="two">
+            <div class="fld">
+              <label for="p-prenom">Ton prénom <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="p-prenom" name="prenom" placeholder="Julie" autocomplete="given-name" required aria-required="true" />
+            </div>
+            <div class="fld">
+              <label for="p-email">Ton email <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="p-email" name="email" placeholder="toi@exemple.fr" autocomplete="email" required aria-required="true" />
+            </div>
+          </div>
+
+          <div class="consent">
+            <input type="checkbox" id="p-consent" name="consentement" value="oui" required aria-required="true" />
+            <label for="p-consent">
+              J’accepte que Sarah garde mon adresse pour me recontacter au sujet du sommeil de mon enfant. J’ai lu la <a href="/politique-confidentialite">politique de confidentialité</a>. Je peux me désinscrire à tout moment.
+            </label>
+          </div>
+
+          <p class="hint" data-hint role="status" aria-live="polite"></p>
+
+          <Button type="submit" variant="gold" fullWidth>Recevoir le planning</Button>
+          <p class="reassure">Gratuit · Sans engagement · Aucune publicité</p>
+        </form>
+      </div>
+
+      <!-- Photo 07 (commande 9) : un planning rempli, sous le formulaire pour équilibrer les deux colonnes (polish 08/09). -->
+      <figure class="card photo">
+        <Photo id="07-planning" widths={[640, 1280]} sizes="(max-width: 900px) calc(100vw - 40px), 640px" />
+      </figure>
+
+      <aside class="side">
+        <div class="card preview">
+          <!-- La première page du vrai PDF 0-2 ans, rendue par site/scripts/apercu-planning.sh (décision de Florent, 03/09). -->
+          <img class="sheet" src="/images/planning-apercu.webp" width="1400" height="991" loading="lazy" decoding="async"
+            alt="La feuille du planning : sept lignes pour les jours, vingt-quatre colonnes pour les heures, la légende en haut à droite et un espace pour les annotations en bas" />
+          <p class="preview-cap">A4 paysage, deux versions : <strong>0 à 2 ans</strong> et <strong>2 à 6 ans</strong>. S’imprime en noir et blanc.</p>
+        </div>
+
+        <div class="card how">
+          <p class="k">Comment le remplir</p>
+          <ul class="legende">
+            {legende.map((l) => (
+              <li><span class:list={['sw', l.swatch]} aria-hidden="true"></span><strong>{l.label}</strong><span class="how-txt">{l.how}</span></li>
+            ))}
+          </ul>
+          <p class="how-note">Un stylo suffit, pas besoin de surligneurs : les formes se distinguent déjà sans couleur. Note à côté ce qui te semble important, un biberon, une dent, du monde à la maison.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section why">
+    <div class="container why-inner">
+      <IconCircle name="book" size={52} />
+      <div>
+        <h2>Pourquoi sept jours</h2>
+        <p>Une nuit ne dit rien, une semaine dit presque tout. Les siestes qui glissent, les couchers qui s’allongent, les réveils qui reviennent à la même heure : ça n’apparaît qu’en regardant plusieurs jours côte à côte.</p>
+        <p>C’est ce document qui me permet de comprendre les nuits de ton enfant avant qu’on se parle. Si tu prends rendez-vous, tu l’auras déjà commencé.</p>
+        <Button href="/questionnaire" variant="secondary" size="sm">Démarrer le questionnaire</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Fond sauge de la charte : le vert des vagues, pour l'outil. Les cartes restent crème, aucun texte atténué à même le fond. */
+  .form-section { background: var(--sage-100); border-block: 1px solid var(--sage-300); }
+  .grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 28px; align-items: start; }
+  .grid > .side { grid-row: 1 / span 2; grid-column: 2; }
+  .card { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-xl); }
+  .form-card { padding: 34px; }
+  .form-card h2 { font-size: var(--fs-h3); margin: 0 0 8px; }
+  .form-intro { margin: 0 0 24px; color: var(--text-body); }
+  form { display: flex; flex-direction: column; gap: 20px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .hp { position: absolute; left: -9999px; }
+
+  .fld { display: flex; flex-direction: column; gap: 8px; }
+  .fld label { font-weight: var(--fw-bold); color: var(--text-strong); font-size: 15px; }
+  .req { color: var(--gold-700); margin-left: 3px; }
+  input[type="text"], input[type="email"] {
+    width: 100%; padding: 13px 15px; min-height: 50px;
+    background: var(--bg-page); color: var(--text-body);
+    border: 1.5px solid var(--border); border-radius: var(--radius-md);
+    font-size: 16px; transition: border-color var(--dur-base) var(--ease-soft);
+  }
+  ::placeholder { color: var(--ink-300); }
+  input:hover { border-color: var(--border-strong); }
+  input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; border-color: var(--gold-500); }
+
+  .consent { display: flex; gap: 12px; align-items: flex-start; }
+  .consent input { width: 22px; height: 22px; min-height: 0; flex-shrink: 0; margin-top: 2px; padding: 0; accent-color: var(--gold-600); cursor: pointer; }
+  .consent label { font-size: var(--fs-sm); line-height: 1.5; cursor: pointer; margin: 0; }
+  .consent a { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; }
+  .hint { min-height: 0; margin: -8px 0 0; font-size: var(--fs-sm); color: var(--text-body); }
+  .hint:empty { display: none; }
+  .reassure { text-align: center; font-size: var(--fs-sm); color: var(--text-muted); margin: 0; }
+
+  .side { display: flex; flex-direction: column; gap: 14px; }
+  .preview { padding: 18px; }
+  .sheet { display: block; width: 100%; height: auto; aspect-ratio: 1400 / 991; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
+  .preview-cap { margin: 14px 0 0; font-size: var(--fs-sm); color: var(--text-body); }
+  .preview-cap strong { color: var(--text-strong); }
+
+  .photo { margin: 0; overflow: hidden; aspect-ratio: 3 / 2; }
+  .photo :global(picture), .photo :global(img) { width: 100%; height: 100%; }
+  .photo :global(img) { object-fit: cover; object-position: 50% 45%; }
+  .how { padding: 22px; }
+  .k { font-size: 12.5px; font-weight: var(--fw-extrabold); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-body); margin: 0 0 12px; }
+  .legende { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .legende li { display: grid; grid-template-columns: 18px auto 1fr; gap: 10px; align-items: center; font-size: var(--fs-sm); }
+  .legende strong { color: var(--text-strong); }
+  .how-txt { color: var(--text-body); }
+  .sw { width: 18px; height: 12px; display: inline-flex; align-items: center; justify-content: center; }
+  .sw.trait::before { content: ''; width: 16px; height: 3px; border-radius: 2px; background: var(--ink-900); }
+  .sw.triangle::before { content: ''; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 10px solid var(--ink-900); }
+  .sw.croix { position: relative; }
+  .sw.croix::before, .sw.croix::after { content: ''; position: absolute; width: 12px; height: 2.5px; border-radius: 2px; background: var(--error); }
+  .sw.croix::before { transform: rotate(45deg); }
+  .sw.croix::after { transform: rotate(-45deg); }
+  .sw.point::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--repas); }
+  .sw.vide { height: 10px; border: 1px dashed var(--border-strong); border-radius: 2px; }
+  .how-note { margin: 14px 0 0; font-size: var(--fs-sm); color: var(--text-body); }
+
+  .why { background: var(--cream-100); border-top: 1px solid var(--border); }
+  .why-inner { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: start; max-width: 860px; }
+  .why h2 { margin: 6px 0 12px; }
+  .why p { margin: 0 0 12px; max-width: 60ch; }
+  .why :global(.btn) { margin-top: 8px; }
+
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .grid > .side { grid-row: auto; grid-column: auto; } .photo { aspect-ratio: 4 / 3; } }
+  @media (max-width: 560px) { .two { grid-template-columns: 1fr; } .form-card { padding: 24px; } .why-inner { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  /* Validation douce, à la première personne, sans le mot « erreur ». */
+  const form = document.querySelector<HTMLFormElement>('form[name="planning"]');
+  if (form) {
+    const hint = form.querySelector<HTMLElement>('[data-hint]')!;
+    form.addEventListener('submit', (e) => {
+      const prenom = (form.elements.namedItem('prenom') as HTMLInputElement).value.trim();
+      const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
+      const ok = (form.elements.namedItem('consentement') as HTMLInputElement).checked;
+      let msg = '';
+      if (!prenom) msg = 'Il me faut ton prénom pour t’envoyer le planning.';
+      else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) msg = 'Il me faut une adresse email valide pour te répondre ensuite.';
+      else if (!ok) msg = 'J’ai besoin de ton accord pour garder ton adresse.';
+      if (msg) { e.preventDefault(); hint.textContent = msg; return; }
+      hint.textContent = '';
+      // Le prénom sert à personnaliser la page suivante. Jamais dans l'URL, et effacé juste après.
+      try { sessionStorage.setItem('ps_planning_prenom', prenom); } catch {}
+    });
+    form.addEventListener('input', () => { hint.textContent = ''; });
+  }
+</script>

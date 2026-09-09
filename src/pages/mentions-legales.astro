@@ -1,0 +1,8 @@
+---
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { mentionsLegales } from '../data/legal';
+---
+<Base title="Mentions légales" description="Éditeur du site petitsommeil.fr, hébergement, propriété intellectuelle et nature des prestations proposées par Petit Sommeil.">
+  <LegalPage doc={mentionsLegales} />
+</Base>

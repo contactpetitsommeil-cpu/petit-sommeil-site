@@ -1,0 +1,66 @@
+---
+import type { Option } from '../data/questionnaire';
+interface Props { name: string; label: string; hint?: string; options: Option[]; cols: number; multi?: boolean }
+const { name, label, hint, options, cols, multi = false } = Astro.props;
+const norm = options.map((o) => (typeof o === 'string' ? { label: o, value: o } : { label: o.label, value: o.value ?? o.label, showFor: o.showFor }));
+const mcols = cols >= 3 ? 2 : 1;
+const tpl = label.includes('{prenom}') ? label : undefined;
+const shown = label.replace('{prenom}', 'ton enfant');
+---
+<fieldset class="tf" data-field={name}>
+  <legend>
+    <span class="lbl" data-tpl={tpl}>{shown}</span>
+    {hint && <span class="hint">{hint}</span>}
+  </legend>
+  <div class="tiles" style={`--cols:${cols};--cols-m:${mcols}`}>
+    {norm.map((o) => (
+      <label class="tile" data-show-for={o.showFor}>
+        <input type={multi ? 'checkbox' : 'radio'} name={name} value={o.value} />
+        <span class="txt">{o.label}</span>
+        <span class="tick" aria-hidden="true"></span>
+      </label>
+    ))}
+  </div>
+</fieldset>
+
+<style>
+  .tf { border: 0; padding: 0; margin: 0 0 30px; min-width: 0; }
+  legend { padding: 0; margin-bottom: 12px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+  .lbl { font-weight: var(--fw-bold); color: var(--text-strong); font-size: 17px; }
+  .hint { font-size: var(--fs-sm); color: var(--text-muted); }
+
+  .tiles { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: 10px; }
+
+  .tile {
+    position: relative; display: flex; align-items: center; gap: 10px;
+    min-height: 56px; padding: 14px 42px 14px 18px;
+    background: var(--surface-card); border: 1.5px solid var(--border); border-radius: var(--radius-md);
+    cursor: pointer; font-size: 15px; line-height: 1.35; color: var(--text-body);
+    transition: border-color var(--dur-base) var(--ease-soft), background var(--dur-base) var(--ease-soft);
+  }
+  .tile:hover { border-color: var(--border-strong); }
+  .tile:has(input:focus-visible) { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+
+  input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+
+  .tick {
+    position: absolute; right: 14px; top: 50%; translate: 0 -50%;
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1.5px solid var(--border-strong); flex-shrink: 0;
+    transition: background var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft);
+  }
+  .tile:has(input[type="checkbox"]) .tick { border-radius: 6px; }
+
+  .tile:has(input:checked) { border-color: var(--gold-500); background: var(--cream-100); color: var(--text-strong); font-weight: var(--fw-semibold); }
+  .tile:has(input:checked) .tick { background: var(--gold-500); border-color: var(--gold-500); }
+  .tile:has(input:checked) .tick::after {
+    content: ''; position: absolute; left: 5px; top: 6px; width: 9px; height: 5px;
+    border-left: 2px solid var(--navy-900); border-bottom: 2px solid var(--navy-900); transform: rotate(-45deg);
+  }
+
+  .tile[hidden] { display: none; }
+
+  @media (max-width: 640px) {
+    .tiles { grid-template-columns: repeat(var(--cols-m), 1fr); }
+  }
+</style>

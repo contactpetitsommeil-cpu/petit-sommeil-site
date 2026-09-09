@@ -1,0 +1,22 @@
+---
+interface Props { q: string; a: string; open?: boolean }
+const { q, a, open = false } = Astro.props;
+/* Un double saut de ligne dans la réponse fait un nouveau paragraphe (signature de Sarah en fin de réponse). */
+const paras = a.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+---
+<details class="faq" open={open}>
+  <summary><span>{q}</span><span class="chev" aria-hidden="true"></span></summary>
+  <div class="ans">{paras.map((p, i) => <p class:list={[i === paras.length - 1 && paras.length > 1 && 'sig']}>{p}</p>)}</div>
+</details>
+<style>
+  .faq { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0 20px; }
+  summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 0; font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 18px; color: var(--text-strong); }
+  summary::-webkit-details-marker { display: none; }
+  .chev { width: 10px; height: 10px; border-right: 2px solid var(--gold-600); border-bottom: 2px solid var(--gold-600); transform: rotate(45deg); transition: transform var(--dur-base) var(--ease-soft); flex-shrink: 0; margin-right: 4px; }
+  .faq[open] .chev { transform: rotate(-135deg); }
+  .ans { padding-bottom: 18px; padding-right: 32px; }
+  .ans p { margin: 0 0 10px; }
+  .ans p:last-child { margin-bottom: 0; }
+  .sig { font-family: var(--font-display); font-style: italic; color: var(--ink-500); }
+  summary:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: -2px; border-radius: var(--radius-sm); }
+</style>

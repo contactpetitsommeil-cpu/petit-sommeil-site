@@ -1,0 +1,49 @@
+---
+/**
+ * Une « scène » (règle hybride validée par Florent le 08/09/2026) : la photo occupe l'écran et reste en place
+ * pendant que le texte arrive sur une carte crème ou rose qui glisse par-dessus. `position: sticky`, aucun
+ * JavaScript, supporté sur iPhone (contrairement à `background-attachment: fixed`). Le texte n'est jamais
+ * sur la photo : il est sur la carte, opaque, les règles de contraste de la charte s'y appliquent telles quelles.
+ * - `carte` : côté de la carte, à l'opposé du sujet de la photo pour le laisser voir.
+ * - `sujet` : où est le sujet dans la photo, pour le cadrage sur téléphone (object-position).
+ * - `tone` : 'creme' ou 'rose' (la section du parent).
+ * - `priority` : la scène est en haut de page (Accompagnements), la photo se charge tout de suite.
+ */
+import Photo from './Photo.astro';
+import type { PhotoId } from '../data/photos';
+interface Props { id: PhotoId; carte?: 'gauche' | 'droite'; sujet?: 'gauche' | 'droite' | 'centre'; tone?: 'creme' | 'rose'; priority?: boolean; labelledby?: string; class?: string }
+const { id, carte = 'gauche', sujet = 'centre', tone = 'creme', priority = false, labelledby, class: cls } = Astro.props;
+---
+<section class:list={['scene', cls]} aria-labelledby={labelledby}>
+  <div class:list={['scene-bg', `sujet-${sujet}`]}>
+    <Photo id={id} mobile="mobile" desktop="desktop" priority={priority}
+      widths={[1200, 1800, 2400]} sizes="100vw" mobileWidths={[600, 900, 1200]} mobileSizes="100vw" />
+  </div>
+  <div class="scene-body">
+    <div class="container">
+      <div class:list={['scene-card', tone, carte]}><slot /></div>
+    </div>
+  </div>
+</section>
+<style>
+  .scene { position: relative; }
+  .scene-bg { position: sticky; top: 0; height: 100vh; overflow: hidden; background: var(--surface-inset); }
+  .scene-bg :global(picture), .scene-bg :global(img) { width: 100%; height: 100%; }
+  .scene-bg :global(img) { object-fit: cover; object-position: 50% 40%; }
+  .sujet-droite :global(img) { object-position: 72% 40%; }
+  .sujet-gauche :global(img) { object-position: 25% 40%; }
+  .scene-body { position: relative; margin-top: -28vh; padding-bottom: 14vh; }  /* Florent, 08/09 : la carte remonte moins haut */
+  .scene-card { background: var(--surface-card); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); padding: 52px 56px; max-width: 560px; }
+  .scene-card.droite { margin-left: auto; }
+  .scene-card.rose { background: var(--rose-100); border: 1px solid var(--rose-300); box-shadow: var(--shadow-md); }
+  .scene-card.rose :global(.eyebrow) { color: var(--navy-900); }
+  .scene-card :global(p) { font-size: 18px; line-height: 1.6; margin: 0 0 14px; }
+  .scene-card :global(p:last-child) { margin-bottom: 0; }
+  .scene-card :global(.lead) { font-size: var(--fs-lead); }
+  @media (max-width: 720px) {
+    .scene-bg { height: 72vh; }
+    .scene-body { margin-top: -30vh; padding-bottom: 10vh; }
+    .scene-card { padding: 28px 22px; max-width: none; }
+    .scene-card :global(p) { font-size: var(--fs-body); }
+  }
+</style>

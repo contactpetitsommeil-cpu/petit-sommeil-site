@@ -1,0 +1,52 @@
+---
+import Logo from './Logo.astro';
+import { site, footerColumns } from '../data/site';
+---
+<footer class="footer">
+  <div class="container grid">
+    <div class="brand-col">
+      <Logo variant="badge" size={96} />
+      <p class="brand-text">{site.role}. Un accompagnement doux, sans culpabilité, à ton rythme.</p>
+    </div>
+
+    {footerColumns.map((col) => (
+      <nav aria-label={col.heading}>
+        <p class="col-title">{col.heading}</p>
+        <ul>{col.items.map((i) => <li><a href={i.href}>{i.label}</a></li>)}</ul>
+      </nav>
+    ))}
+
+    <div>
+      <p class="col-title">Suivez-moi</p>
+      <a class="social" href={site.instagram} target="_blank" rel="noreferrer" aria-label="Instagram Petit Sommeil (nouvelle fenêtre)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <p class="contact">Une question ?<br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </div>
+  </div>
+
+  <div class="container legal">
+    <p>© {site.name} {site.year}. Tous droits réservés. Les conseils proposés ne remplacent pas un avis médical.</p>
+    <p class="signature">Doucement, pas à pas, vers des nuits plus sereines.</p>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--cream-100); border-top: 1px solid var(--border); padding: 52px 0 30px; }
+  .grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 0.8fr; gap: 32px; }
+  .brand-text { font-size: var(--fs-sm); color: var(--text-muted); margin: 16px 0 0; max-width: 220px; }
+  .col-title { font-size: 12px; font-weight: var(--fw-extrabold); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-strong); margin: 0 0 16px; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  ul a { font-size: 13.5px; color: var(--text-body); text-decoration: none; }
+  ul a:hover { color: var(--accent-strong); text-decoration: underline; }
+  .social { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-strong); display: inline-flex; align-items: center; justify-content: center; color: var(--navy-900); }
+  .social svg { width: 18px; height: 18px; }
+  .social:hover { border-color: var(--gold-400); }
+  .contact { font-size: var(--fs-sm); margin: 16px 0 0; }
+  .legal { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .legal p { font-size: var(--fs-xs); color: var(--text-muted); margin: 0; }
+  .legal .signature { margin-top: 6px; font-family: var(--font-display); font-style: italic; color: var(--ink-500); }
+
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } .brand-col { grid-column: 1 / -1; } }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; gap: 28px; } }
+</style>

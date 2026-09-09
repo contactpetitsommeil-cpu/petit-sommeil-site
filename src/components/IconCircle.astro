@@ -1,0 +1,13 @@
+---
+import { icons, type IconName } from '../data/icons';
+interface Props { name: IconName; tone?: 'gold' | 'navy' | 'invert'; size?: number }
+const { name, tone = 'gold', size = 56 } = Astro.props;
+---
+<span class:list={['ic', tone]} style={`--s:${size}px`} set:html={icons[name]} />
+<style>
+  .ic { display: inline-flex; align-items: center; justify-content: center; width: var(--s); height: var(--s); border-radius: 50%; flex-shrink: 0; border: 1.5px solid; }
+  .ic :global(svg) { width: calc(var(--s) * 0.42); height: calc(var(--s) * 0.42); }
+  .gold { background: var(--cream-100); border-color: var(--gold-400); color: var(--gold-600); }
+  .navy { background: var(--cream-100); border-color: var(--navy-100); color: var(--navy-800); }
+  .invert { background: transparent; border-color: var(--border-on-dark); color: var(--gold-400); }
+</style>

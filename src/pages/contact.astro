@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import IconCircle from '../components/IconCircle.astro';
+import Photo from '../components/Photo.astro';
+import { site } from '../data/site';
+import type { IconName } from '../data/icons';
+
+const infos: { icon: IconName; t: string; d: string; sub: string; href?: string }[] = [
+  { icon: 'mail', t: 'Par email', d: site.email, sub: 'Réponse personnelle sous 48h', href: `mailto:${site.email}` },
+  { icon: 'instagram', t: 'Sur Instagram', d: site.instagramHandle, sub: 'Conseils et coulisses', href: site.instagram },
+  { icon: 'video', t: 'Où on se voit', d: 'En visio partout en France', sub: 'À domicile autour de Saint-Malo' },
+];
+
+const sujets = [
+  'Une question sur les accompagnements',
+  'Une question sur les tarifs',
+  'Je suis un professionnel qui voudrait te recommander',
+  'Autre',
+];
+---
+<Base
+  title="Contact, une question ? Écris-moi"
+  description="Une question sur les accompagnements, les tarifs ou l’organisation ? Écris-moi, je te réponds sous 48h. Pour un accompagnement, passe par le questionnaire."
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Une question ? Écris-moi"
+    intro="Pour une demande d’accompagnement, le questionnaire reste le chemin le plus rapide. Cette page sert au reste : une question sur mon travail, un professionnel qui voudrait me recommander, une famille qui hésite encore."
+  />
+
+  <section class="section">
+    <div class="container grid">
+      <div class="card form-card">
+        <form
+          name="contact"
+          method="POST"
+          action="/contact-merci"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="hp">
+            <label>Ne rien remplir ici : <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
+
+          <div class="two">
+            <div class="fld">
+              <label for="c-prenom">Ton prénom <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="c-prenom" name="prenom" placeholder="Julie" autocomplete="given-name" required aria-required="true" />
+            </div>
+            <div class="fld">
+              <label for="c-email">Ton email <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="c-email" name="email" placeholder="toi@exemple.fr" autocomplete="email" required aria-required="true" />
+            </div>
+          </div>
+
+          <div class="fld">
+            <label for="c-sujet">Ta demande</label>
+            <select id="c-sujet" name="sujet">
+              <option value="">Choisir un sujet…</option>
+              {sujets.map((s) => <option value={s}>{s}</option>)}
+            </select>
+          </div>
+
+          <div class="fld">
+            <label for="c-message">Ton message <span class="req" aria-hidden="true">*</span></label>
+            <textarea id="c-message" name="message" rows="6" placeholder="Dis-moi tout, prends le temps qu’il te faut." required aria-required="true"></textarea>
+            <span class="fld-hint">Pas besoin d’en dire trop. Deux lignes suffisent, on ira plus loin ensuite.</span>
+          </div>
+
+          <div class="consent">
+            <input type="checkbox" id="c-consent" name="consentement" value="oui" required aria-required="true" />
+            <label for="c-consent">
+              J’accepte que Sarah utilise ces informations pour me recontacter au sujet de ma demande. J’ai lu la <a href="/politique-confidentialite">politique de confidentialité</a>.
+            </label>
+          </div>
+
+          <Button type="submit" variant="primary" fullWidth>Envoyer mon message</Button>
+          <p class="reassure">Sans engagement · Réponse sous 48h</p>
+        </form>
+      </div>
+
+      <aside class="side" aria-label="Autres moyens de me joindre">
+        <div class="card nudge on-dark">
+          <div class="nudge-photo"><Photo id="08-contact" widths={[120, 240, 360]} sizes="120px" /></div>
+          <p class="nudge-title">Tu cherches un accompagnement&nbsp;?</p>
+          <p class="nudge-text">Le questionnaire va plus vite qu’un mail et me donne ce qu’il faut pour te répondre utilement.</p>
+          <Button href="/questionnaire" variant="gold" size="sm">Démarrer le questionnaire</Button>
+        </div>
+
+        {infos.map((c) => (
+          <div class="card info">
+            <IconCircle name={c.icon} size={44} />
+            <div>
+              <p class="k">{c.t}</p>
+              {c.href
+                ? <p class="v"><a href={c.href} rel={c.href.startsWith('http') ? 'noreferrer' : undefined} target={c.href.startsWith('http') ? '_blank' : undefined}>{c.d}</a></p>
+                : <p class="v">{c.d}</p>}
+              <p class="s">{c.sub}</p>
+            </div>
+          </div>
+        ))}
+
+        <div class="card hours">
+          <p class="k">Quand on peut se parler</p>
+          <ul>
+            <li><strong>Consultations</strong> : lundi au vendredi, 9h à 12h et 13h30 à 17h.</li>
+            <li><strong>Pendant un accompagnement</strong>, joignable de 9h à 21h en semaine, 9h à 12h les jours fériés.</li>
+            <li>Le <strong>samedi</strong> au cas par cas, <strong>dimanche</strong> je coupe.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .grid { display: grid; grid-template-columns: 1.35fr 0.85fr; gap: 28px; align-items: start; }
+  .card { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-xl); }
+  .form-card { padding: 34px; }
+  form { display: flex; flex-direction: column; gap: 22px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .hp { position: absolute; left: -9999px; }
+
+  .fld { display: flex; flex-direction: column; gap: 8px; }
+  .fld label { font-weight: var(--fw-bold); color: var(--text-strong); font-size: 15px; }
+  .req { color: var(--gold-700); margin-left: 3px; }
+  .fld-hint { font-size: var(--fs-xs); color: var(--text-muted); }
+
+  input[type="text"], input[type="email"], textarea, select {
+    width: 100%; padding: 13px 15px; min-height: 50px;
+    background: var(--bg-page); color: var(--text-body);
+    border: 1.5px solid var(--border); border-radius: var(--radius-md);
+    font-size: 16px; transition: border-color var(--dur-base) var(--ease-soft);
+  }
+  textarea { resize: vertical; line-height: 1.55; }
+  ::placeholder { color: var(--ink-300); }
+  input:hover, textarea:hover, select:hover { border-color: var(--border-strong); }
+  input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: 3px solid var(--focus-ring); outline-offset: 2px; border-color: var(--gold-500);
+  }
+  input:invalid:not(:placeholder-shown), textarea:invalid:not(:placeholder-shown) {
+    border-color: var(--error);
+  }
+  select {
+    appearance: none; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--gold-600) 50%), linear-gradient(135deg, var(--gold-600) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 22px, calc(100% - 14px) 22px;
+    background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
+  }
+
+  .consent { display: flex; gap: 12px; align-items: flex-start; }
+  .consent input {
+    width: 22px; height: 22px; min-height: 0; flex-shrink: 0; margin-top: 2px; padding: 0;
+    accent-color: var(--gold-600); cursor: pointer;
+  }
+  .consent label { font-size: var(--fs-sm); line-height: 1.5; cursor: pointer; margin: 0; }
+  .consent a { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; }
+
+  .reassure { text-align: center; font-size: var(--fs-sm); color: var(--text-muted); margin: 0; }
+
+  /* Colonne droite */
+  .side { display: flex; flex-direction: column; gap: 14px; }
+
+  .nudge {
+    padding: 22px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start;
+    background: var(--navy-900); color: var(--text-on-dark); border-color: var(--navy-900);
+  }
+  .nudge-photo { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 3px solid var(--gold-500); background: var(--surface-inset); }
+  .nudge-photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .nudge-title { margin: 0; font-family: var(--font-display); font-size: 19px; color: var(--text-on-dark); font-weight: var(--fw-bold); }
+  .nudge-text { margin: 0; font-size: var(--fs-sm); color: var(--text-on-dark-muted); }
+
+  .info { display: flex; gap: 16px; align-items: center; padding: 18px 20px; }
+  .k { font-size: 12.5px; font-weight: var(--fw-extrabold); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-body); margin: 0; }
+  .v { font-weight: var(--fw-bold); font-size: 15px; color: var(--text-strong); margin: 3px 0 2px; word-break: break-word; }
+  .v a { text-decoration: underline; text-underline-offset: 3px; }
+  .s { font-size: var(--fs-sm); color: var(--text-body); margin: 0; }
+
+  .hours { padding: 22px; }
+  .hours ul { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: var(--text-body); line-height: 1.5; }
+  .hours strong { color: var(--text-strong); font-weight: var(--fw-bold); }
+
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .two { grid-template-columns: 1fr; } .form-card { padding: 24px; } }
+</style>

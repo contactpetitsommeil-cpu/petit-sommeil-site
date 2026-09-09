@@ -1,0 +1,440 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import Tiles from '../components/Tiles.astro';
+import Field from '../components/Field.astro';
+import { icons } from '../data/icons';
+import { BRACKETS, stepTitles, step1, step2, step3, step4, step5, type Field as F, type BracketKey } from '../data/questionnaire';
+
+const titles = stepTitles.map((t) => t.replace('{prenom}', 'ton enfant'));
+const render = (f: F) => f.type === 'tiles';
+---
+<Base
+  title="Questionnaire sommeil en 5 minutes"
+  description="Cinq étapes adaptées à l’âge de ton enfant, cinq minutes. Tes réponses sont sauvegardées au fur et à mesure. Je te réponds sous 48h, sans engagement."
+>
+  <Fragment slot="head">
+    <script is:inline>document.documentElement.classList.add('js')</script>
+  </Fragment>
+
+  <div class="q-wrap">
+    <div class="container q-container">
+      <p class="eyebrow">Questionnaire</p>
+      <h1 class="q-title" data-title tabindex="-1">{titles[0]}</h1>
+      <p class="lead q-intro">Cinq minutes, des questions adaptées à l’âge de ton enfant, et tes réponses sont sauvegardées au fur et à mesure.</p>
+
+      <div class="q-progress" data-progress>
+        <div class="q-prow">
+          <span data-step-label>Étape 1 sur 5</span>
+          <span data-pct>20 %</span>
+        </div>
+        <div class="q-bar" role="progressbar" aria-label="Progression du questionnaire" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-valuetext="Étape 1 sur 5">
+          <span data-bar style="width:20%"></span>
+        </div>
+      </div>
+
+      <form
+        class="q-form"
+        name="questionnaire"
+        method="POST"
+        action="/questionnaire-merci"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        data-form
+      >
+        <input type="hidden" name="form-name" value="questionnaire" />
+        <input type="hidden" name="tranche-libelle" value="" data-tranche-libelle />
+        <input type="hidden" name="age-exact" value="" data-age-exact />
+        <input type="hidden" name="recapitulatif" value="" data-recap />
+        <input type="hidden" name="subject" value="Questionnaire Petit Sommeil" data-subject />
+        <p class="hp"><label>Ne rien remplir ici : <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+
+        <section class="q-step is-active" data-step="1" aria-labelledby="lg-1">
+          <h2 class="q-legend" id="lg-1">{titles[0]}</h2>
+          {/* Prénom et date de naissance, puis le message hors périmètre juste sous la date (spec v3), puis le reste. */}
+          {step1.slice(0, 2).map((f) => <Field field={f} />)}
+          <p class="q-out-of-range" data-out-of-range hidden role="status">
+            Mon accompagnement s’adresse aux enfants jusqu’à 6 ans. <a href="/contact">Écris-moi</a>, on regarde ensemble ce que je peux faire.
+          </p>
+          {step1.slice(2).map((f) => (render(f)
+            ? <Tiles name={f.key} label={f.label} hint={f.hint} options={(f as any).options} cols={(f as any).cols} multi={(f as any).multi} />
+            : <Field field={f} />))}
+        </section>
+
+        <section class="q-step" data-step="2" aria-labelledby="lg-2">
+          <h2 class="q-legend" id="lg-2">{titles[1]}</h2>
+          {BRACKETS.map((b) => (
+            <div class="q-branch" data-bracket={b.value}>
+              <p class="q-branch-tag">Réponses pour la tranche {b.label}</p>
+              {step2[b.value as BracketKey].map((f) => (render(f)
+                ? <Tiles name={f.key} label={f.label} hint={f.hint} options={(f as any).options} cols={(f as any).cols} multi={(f as any).multi} />
+                : <Field field={f} />))}
+            </div>
+          ))}
+        </section>
+
+        <section class="q-step" data-step="3" aria-labelledby="lg-3">
+          <h2 class="q-legend" id="lg-3">{titles[2]}</h2>
+          {BRACKETS.map((b) => (
+            <div class="q-branch" data-bracket={b.value}>
+              <p class="q-branch-tag">Réponses pour la tranche {b.label}</p>
+              {step3[b.value as BracketKey].map((f) => (render(f)
+                ? <Tiles name={f.key} label={f.label} hint={f.hint} options={(f as any).options} cols={(f as any).cols} multi={(f as any).multi} />
+                : <Field field={f} />))}
+            </div>
+          ))}
+        </section>
+
+        <section class="q-step" data-step="4" aria-labelledby="lg-4">
+          <h2 class="q-legend" id="lg-4">{titles[3]}</h2>
+          {step4.map((f) => (render(f)
+            ? <Tiles name={f.key} label={f.label} hint={f.hint} options={(f as any).options} cols={(f as any).cols} multi={(f as any).multi} />
+            : <Field field={f} />))}
+        </section>
+
+        <section class="q-step" data-step="5" aria-labelledby="lg-5">
+          <h2 class="q-legend" id="lg-5">{titles[4]}</h2>
+          {step5.map((f) => <Field field={f} />)}
+        </section>
+
+        <p class="q-hint" data-hint role="status" aria-live="polite"></p>
+
+        <div class="q-nav" data-nav>
+          <Button id="q-prev" variant="ghost" data-prev>Précédent</Button>
+          <Button id="q-next" data-next>
+            Continuer
+            <Fragment slot="icon-right" set:html={icons.arrowRight} />
+          </Button>
+          <Button id="q-send" type="submit" variant="gold" data-send>
+            <Fragment slot="icon" set:html={icons.check} />
+            Envoyer ma demande
+          </Button>
+        </div>
+
+        <div class="q-nojs">
+          <Button type="submit" variant="gold" size="lg">Envoyer ma demande</Button>
+        </div>
+      </form>
+
+      <p class="q-reassure">Sans engagement · Réponse sous 48h · Tes réponses restent entre toi et moi.</p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .q-wrap { padding: 56px 0 var(--section-y); }
+  .q-container { max-width: 780px; }
+  .q-title { margin-bottom: 12px; }
+  .q-title:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 6px; border-radius: var(--radius-sm); }
+  .q-intro { color: var(--text-body); margin-bottom: 32px; max-width: 60ch; }
+
+  /* Progression : uniquement avec JS */
+  .q-progress { display: none; margin-bottom: 36px; }
+  :global(.js) .q-progress { display: block; }
+  .q-prow { display: flex; justify-content: space-between; font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--text-body); margin-bottom: 8px; }
+  .q-bar { height: 6px; border-radius: var(--radius-pill); background: var(--cream-200); overflow: hidden; }
+  .q-bar span { display: block; height: 100%; background: var(--gold-500); border-radius: inherit; transition: width var(--dur-slow) var(--ease-soft); }
+
+  /* Étapes */
+  .q-legend { font-size: var(--fs-h3); margin: 40px 0 24px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .q-step:first-of-type .q-legend { margin-top: 0; padding-top: 0; border-top: 0; }
+  :global(.js) .q-legend { display: none; }
+  :global(.js) .q-step:not(.is-active) { display: none; }
+
+  .q-branch-tag { font-size: var(--fs-xs); font-weight: var(--fw-extrabold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-body); background: var(--cream-200); display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); margin-bottom: 18px; }
+  :global(.js) .q-branch-tag { display: none; }
+  :global(.js) .q-branch:not(.is-active) { display: none; }
+
+  .hp { position: absolute; left: -9999px; }
+
+  /* Message hors périmètre */
+  .q-out-of-range {
+    display: block;
+    margin: -18px 0 24px;
+    padding: 14px 18px;
+    background: var(--surface-inset);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    color: var(--text-body);
+    line-height: 1.5;
+  }
+  .q-out-of-range a { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; font-weight: var(--fw-semibold); }
+
+  /* Navigation */
+  .q-hint { min-height: 22px; font-size: var(--fs-sm); color: var(--text-body); margin: 0 0 12px; }
+  .q-nav { display: none; gap: 12px; align-items: center; justify-content: flex-end; padding-top: 8px; }
+  :global(.js) .q-nav { display: flex; }
+  :global(.js) .q-nojs { display: none; }
+  .q-nav :global(#q-prev) { margin-right: auto; }
+
+  .q-reassure { margin: 28px 0 0; font-size: var(--fs-sm); color: var(--text-body); }
+
+  @media (max-width: 480px) {
+    .q-nav { flex-direction: column-reverse; align-items: stretch; }
+    .q-nav :global(#q-prev) { margin-right: 0; }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  if (form) {
+    const KEY = 'ps_questionnaire';
+    /** Doit rester aligné sur BRACKETS dans src/data/questionnaire.ts. */
+    const BRACKETS = [
+      { value: 'b0', label: '0 à 6 mois',   minMonths: 0,  maxMonths: 6  },
+      { value: 'b1', label: '6 à 18 mois',  minMonths: 6,  maxMonths: 18 },
+      { value: 'b2', label: '18 à 24 mois', minMonths: 18, maxMonths: 24 },
+      { value: 'b3', label: '24 à 36 mois', minMonths: 24, maxMonths: 36 },
+      { value: 'b4', label: '3 à 6 ans',    minMonths: 36, maxMonths: 72 },
+    ];
+    const LABELS: Record<string, string> = Object.fromEntries(BRACKETS.map((b) => [b.value, b.label]));
+    const TITLES = ['Parlons de {prenom}', 'Les journées de {prenom}', 'Le coucher et les nuits', 'Tes attentes', 'Tes coordonnées'];
+
+    const steps = [...form.querySelectorAll<HTMLElement>('.q-step')];
+    const title = document.querySelector<HTMLElement>('[data-title]')!;
+    const stepLabel = document.querySelector<HTMLElement>('[data-step-label]')!;
+    const pct = document.querySelector<HTMLElement>('[data-pct]')!;
+    const bar = document.querySelector<HTMLElement>('[data-bar]')!;
+    const barBox = bar.parentElement!;
+    const hint = form.querySelector<HTMLElement>('[data-hint]')!;
+    const prev = form.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = form.querySelector<HTMLButtonElement>('[data-next]')!;
+    const send = form.querySelector<HTMLButtonElement>('[data-send]')!;
+    const trancheLibelle = form.querySelector<HTMLInputElement>('[data-tranche-libelle]')!;
+    const ageExact = form.querySelector<HTMLInputElement>('[data-age-exact]')!;
+    const recap = form.querySelector<HTMLInputElement>('[data-recap]')!;
+    const subject = form.querySelector<HTMLInputElement>('[data-subject]')!;
+    const outOfRange = form.querySelector<HTMLElement>('[data-out-of-range]')!;
+    const top = document.querySelector<HTMLElement>('.q-container')!;
+
+    let current = 1;
+
+    const field = (name: string) => form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${CSS.escape(name)}"]`);
+    /** Pour une radio ou une case, ne renvoie que ce qui est réellement coché. */
+    const value = (name: string) => {
+      const first = field(name);
+      if (!first) return '';
+      const t = (first as HTMLInputElement).type;
+      if (t === 'radio' || t === 'checkbox') {
+        const c = form.querySelector<HTMLInputElement>(`[name="${CSS.escape(name)}"]:checked`);
+        return c ? c.value : '';
+      }
+      return first.value;
+    };
+    const checkedCount = (name: string) => form.querySelectorAll(`[name="${name}"]:checked`).length;
+    const bracket = () => value('tranche');
+    const childName = () => (field('childName') as HTMLInputElement | null)?.value.trim() || '';
+
+    /* --- calcul âge en mois révolus, à partir de la date de naissance -- */
+    function monthsFromDate(iso: string): number | null {
+      if (!iso) return null;
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return null;
+      const now = new Date();
+      let months = (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
+      if (now.getDate() < d.getDate()) months -= 1;
+      return months;
+    }
+    function bracketFromMonths(m: number): string | null {
+      const found = BRACKETS.find((b) => m >= b.minMonths && m < b.maxMonths);
+      return found ? found.value : null;
+    }
+    function formatAge(m: number): string {
+      if (m < 0) return '';
+      if (m < 24) return `${m} mois`;
+      const years = Math.floor(m / 12);
+      const rest = m % 12;
+      return rest ? `${years} ans ${rest} mois` : `${years} ans`;
+    }
+
+    /** Pré-sélectionne la tranche depuis la date, sans jamais l'écraser
+     *  si le parent l'a déjà changée manuellement pour un enfant à cheval. */
+    function syncFromBirthDate(opts: { force?: boolean } = {}) {
+      const iso = (field('birthDate') as HTMLInputElement | null)?.value || '';
+      const months = monthsFromDate(iso);
+      ageExact.value = months !== null ? formatAge(months) : '';
+
+      const outOfBounds = months !== null && (months < 0 || months >= 72);
+      outOfRange.hidden = !outOfBounds;
+
+      if (months === null || outOfBounds) return;
+      const target = bracketFromMonths(months);
+      if (!target) return;
+      const current = bracket();
+      if (opts.force || !current) {
+        const radio = form.querySelector<HTMLInputElement>(`input[name="tranche"][value="${target}"]`);
+        if (radio && !radio.checked) {
+          radio.checked = true;
+          applyBracket();
+        }
+      }
+    }
+
+    /* --- validation, message à la première personne ------------------- */
+    function problem(step: number): string | null {
+      if (step === 1) {
+        if (!childName()) return 'Il me manque le prénom de ton enfant pour continuer.';
+        if (!(field('birthDate') as HTMLInputElement | null)?.value) return 'Il me faut sa date de naissance : c’est elle qui choisit les bonnes questions.';
+        if (!bracket()) return 'Dis-moi dans quelle tranche d’âge se situe ton enfant.';
+        if (!checkedCount('concerns')) return 'Coche au moins une raison qui t’amène.';
+      }
+      if (step === 4) {
+        const d = field('describe') as HTMLTextAreaElement | null;
+        if (!d?.value.trim()) return 'Décris-moi la situation en quelques mots, même brièvement.';
+      }
+      if (step === 5) {
+        const p = field('parentName') as HTMLInputElement | null;
+        const e = field('email') as HTMLInputElement | null;
+        const c = field('consent') as HTMLInputElement | null;
+        if (!p?.value.trim()) return 'Il me faut ton prénom pour te répondre.';
+        if (!e || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e.value)) return 'Il me faut une adresse email valide pour te répondre.';
+        if (!c?.checked) return 'J’ai besoin de ton accord pour te recontacter.';
+      }
+      return null;
+    }
+
+    /* --- prénom injecté dans les titres et les libellés --------------- */
+    function applyName() {
+      const n = childName() || 'ton enfant';
+      title.textContent = TITLES[current - 1].replace('{prenom}', n);
+      form.querySelectorAll<HTMLElement>('[data-tpl]').forEach((el) => {
+        el.textContent = (el.dataset.tpl || '').replace('{prenom}', n);
+      });
+    }
+
+    /* --- branchement par tranche -------------------------------------- */
+    function applyBracket() {
+      const b = bracket();
+      form.querySelectorAll<HTMLElement>('.q-branch').forEach((div) => {
+        const on = div.dataset.bracket === b;
+        div.classList.toggle('is-active', on);
+        div.querySelectorAll<HTMLInputElement>('input, textarea, select').forEach((i) => { i.disabled = !on; });
+      });
+      // `data-show-for` accepte une liste, ex. "b3,b4".
+      form.querySelectorAll<HTMLElement>('[data-show-for]').forEach((el) => {
+        const raw = el.dataset.showFor || '';
+        const allowed = raw.split(',').map((s) => s.trim()).filter(Boolean);
+        const on = allowed.length === 0 || allowed.includes(b);
+        el.hidden = !on;
+        const i = el.querySelector<HTMLInputElement>('input');
+        if (i) { i.disabled = !on; if (!on) i.checked = false; }
+      });
+      trancheLibelle.value = LABELS[b] || '';
+    }
+
+    /* --- affichage ----------------------------------------------------- */
+    function show(step: number, scroll = true) {
+      current = Math.min(5, Math.max(1, step));
+      steps.forEach((s) => s.classList.toggle('is-active', s.dataset.step === String(current)));
+      stepLabel.textContent = `Étape ${current} sur 5`;
+      const p = current * 20;
+      pct.textContent = `${p} %`;
+      bar.style.width = `${p}%`;
+      barBox.setAttribute('aria-valuenow', String(current));
+      barBox.setAttribute('aria-valuetext', `Étape ${current} sur 5`);
+      prev.hidden = current === 1;
+      next.hidden = current === 5;
+      send.hidden = current !== 5;
+      applyName();
+      refresh();
+      if (scroll) {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        top.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        // Le bouton qui vient d'être cliqué peut disparaître : on rend le focus au titre.
+        title.focus({ preventScroll: true });
+      }
+    }
+
+    function refresh() {
+      const msg = problem(current);
+      const btn = current === 5 ? send : next;
+      btn.disabled = !!msg;
+      btn.setAttribute('aria-disabled', String(!!msg));
+      hint.textContent = msg ?? '';
+    }
+
+    /* --- sauvegarde ----------------------------------------------------- */
+    function save() {
+      const data: Record<string, string | string[]> = {};
+      form.querySelectorAll<HTMLInputElement>('input, textarea, select').forEach((el) => {
+        // Le consentement RGPD n'est jamais mémorisé : il doit être coché à chaque session.
+        if (!el.name || el.name === 'bot-field' || el.name === 'form-name' || el.name === 'consent' || el.type === 'hidden') return;
+        if (el.type === 'checkbox') {
+          if (el.checked) {
+            if (!Array.isArray(data[el.name])) data[el.name] = [];
+            (data[el.name] as string[]).push(el.value);
+          }
+        } else if (el.type === 'radio') {
+          if (el.checked) data[el.name] = el.value;
+        } else if (el.value) data[el.name] = el.value;
+      });
+      try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
+    }
+
+    function restore() {
+      let data: Record<string, string | string[]> = {};
+      try { data = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return; }
+      Object.entries(data).forEach(([name, v]) => {
+        const list = Array.isArray(v) ? v : [v];
+        form.querySelectorAll<HTMLInputElement>(`[name="${CSS.escape(name)}"]`).forEach((el) => {
+          if (el.type === 'checkbox' || el.type === 'radio') el.checked = list.includes(el.value);
+          else el.value = String(v);
+        });
+      });
+    }
+
+    form.addEventListener('input', (e) => {
+      const t = e.target as HTMLInputElement;
+      // La date de naissance recalcule la tranche uniquement quand elle bouge.
+      if (t && t.name === 'birthDate') syncFromBirthDate({ force: true });
+      applyName();
+      save();
+      refresh();
+    });
+    form.addEventListener('change', (e) => {
+      const t = e.target as HTMLInputElement;
+      if (t && t.name === 'birthDate') syncFromBirthDate({ force: true });
+      applyBracket();
+      save();
+      refresh();
+    });
+    next.addEventListener('click', () => { if (!problem(current)) show(current + 1); });
+    prev.addEventListener('click', () => show(current - 1));
+    /** Les champs des tranches non choisies sont désactivés, donc jamais envoyés.
+     *  Ce récapitulatif reprend les réponses données avec leur libellé, l'âge exact
+     *  en première ligne, pour que l'email de Sarah se lise d'un coup. */
+    function buildRecap(): string {
+      const lignes: string[] = [];
+      if (ageExact.value) lignes.push(`Âge exact : ${ageExact.value}`);
+      form.querySelectorAll<HTMLElement>('.q-step').forEach((step) => {
+        step.querySelectorAll<HTMLElement>('fieldset.tf, .fld').forEach((bloc) => {
+          if (bloc.closest('.q-branch:not(.is-active)')) return;
+          const lbl = bloc.querySelector<HTMLElement>('.lbl');
+          if (!lbl) return;
+          const champs = [...bloc.querySelectorAll<HTMLInputElement>('input, textarea, select')].filter((i) => !i.disabled);
+          const coches = champs.filter((i) => (i.type === 'radio' || i.type === 'checkbox') && i.checked).map((i) => i.value);
+          let valeur = coches.map((v) => LABELS[v] ?? v).join(', ');
+          if (!valeur) {
+            const libre = champs.find((i) => i.type !== 'radio' && i.type !== 'checkbox' && i.value.trim());
+            if (libre) valeur = libre.type === 'date' ? libre.value.split('-').reverse().join('/') : libre.value.trim();
+          }
+          if (valeur) lignes.push(`${lbl.textContent?.trim()} : ${valeur}`);
+        });
+      });
+      return lignes.join('\n');
+    }
+
+    form.addEventListener('submit', (e) => {
+      if (problem(5)) { e.preventDefault(); refresh(); return; }
+      recap.value = buildRecap();
+      subject.value = `Questionnaire : ${childName() || 'un enfant'}, ${LABELS[bracket()] || 'tranche non précisée'}`;
+      save();
+    });
+
+    restore();
+    syncFromBirthDate();
+    applyBracket();
+    show(1, false);
+  }
+</script>
