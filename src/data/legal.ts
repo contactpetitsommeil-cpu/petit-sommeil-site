@@ -149,7 +149,7 @@ export const cgv: LegalDoc = {
     { h: 'Article 11. Données personnelles', body: [
       'Les données collectées sont traitées selon la politique de confidentialité, accessible depuis le pied de page.',
     ] },
-    // [À CONFIRMER] médiateur : coordonnées publiques de SMP pré-remplies, l'adhésion de Sarah reste à confirmer par le bureau (attestation d'adhésion attendue).
+    // Médiateur : adhésion de Sarah à SMP confirmée le 10/09/2026 (Florent), coordonnées ci-dessous inchangées.
     { h: 'Article 12. Litiges', body: [
       'Ces conditions relèvent du droit français. En cas de désaccord, on cherche d’abord une solution ensemble. Sinon, tu peux saisir gratuitement le médiateur de la consommation dont je relève : Société de la Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, www.mediateur-consommation-smp.fr, ou par le formulaire de son site. Les tribunaux français restent compétents.',
     ] },
