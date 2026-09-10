@@ -5,20 +5,31 @@ import Logo from '../components/Logo.astro';
 import Photo from '../components/Photo.astro';
 import CTABand from '../components/CTABand.astro';
 import { site } from '../data/site';
+import { photos } from '../data/photos';
+import { getImage } from 'astro:assets';
 
 /* Textes : livrables/textes/a-propos.md (03/09/2026), version site, huit blocs dans l'ordre du fichier.
    Son histoire (bloc 2) et « Et toi, dans tout ça ? » (bloc 2 bis, ancre #et-toi) sont ses mots du 02/09,
    retravaillés et validés le 03/09. Le nuage ☁️ est ici, une seule fois. */
 
+/* Portrait en JPEG pour le schéma ; @id partagé avec l'accueil et les articles (une seule Sarah pour les moteurs). */
+const portrait = await getImage({ src: photos['02-portrait'].crops.all, format: 'jpeg', width: 680, quality: 80 });
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
+  url: `${site.url}/a-propos`,
   mainEntity: {
     '@type': 'Person',
+    '@id': `${site.url}/a-propos#sarah`,
     name: site.owner,
     jobTitle: site.role,
+    description: 'Conseillère en hygiène de sommeil pour les enfants de 0 à 6 ans, formée par Oh Mama Care. Consultations en visio partout en France et à domicile autour de Saint-Malo. Aucune méthode de pleurs contrôlés.',
+    url: `${site.url}/a-propos`,
+    image: new URL(portrait.src, site.url).href,
     email: site.email,
-    worksFor: { '@type': 'ProfessionalService', name: site.name, url: site.url },
+    worksFor: { '@type': 'ProfessionalService', '@id': `${site.url}/#petit-sommeil`, name: site.name, url: site.url },
+    hasCredential: { '@type': 'EducationalOccupationalCredential', name: 'Hygiène de sommeil des enfants de 0 à 6 ans', credentialCategory: 'formation professionnelle', recognizedBy: { '@type': 'Organization', name: 'Oh Mama Care' }, dateCreated: '2026-05' },
+    knowsAbout: ['sommeil du bébé', 'sommeil de l’enfant de 0 à 6 ans', 'hygiène de sommeil', 'réveils nocturnes', 'siestes', 'endormissement', 'post-partum et sommeil du parent'],
     sameAs: [site.instagram],
   },
 };

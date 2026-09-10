@@ -33,10 +33,16 @@ const okList = [
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify({
-      '@context': 'https://schema.org', '@type': 'ProfessionalService', name: site.name, url: site.url, email: site.email,
+      '@context': 'https://schema.org', '@type': 'ProfessionalService', '@id': `${site.url}/#petit-sommeil`, name: site.name, url: site.url, email: site.email,
       description: 'Conseillère en hygiène de sommeil pour les enfants de 0 à 6 ans, à Saint-Malo et alentours. En visio ou à domicile.',
-      founder: { '@type': 'Person', name: site.owner, jobTitle: site.role },
-      areaServed: ['Saint-Malo', 'Dinard', 'Dol-de-Bretagne', 'Cancale', 'FR'], sameAs: [site.instagram],
+      image: `${site.url}/images/og-default.jpg`, logo: `${site.url}/images/logo-rond-navy.svg`,
+      founder: { '@type': 'Person', '@id': `${site.url}/a-propos#sarah`, name: site.owner, jobTitle: site.role, url: `${site.url}/a-propos` },
+      /* Commune du siège (mentions légales), sans la rue : Sarah consulte en visio et se déplace, elle ne reçoit pas. */
+      address: { '@type': 'PostalAddress', addressLocality: 'Le Vivier-sur-Mer', postalCode: '35960', addressRegion: 'Bretagne', addressCountry: 'FR' },
+      areaServed: ['Saint-Malo', 'Dinard', 'Dol-de-Bretagne', 'Cancale', 'Saint-Méloir-des-Ondes', 'Plerguer', 'Miniac', 'Le Tronchet', 'Beaussais-sur-Mer', 'France (visio)'],
+      priceRange: '40 € à 280 €',
+      knowsAbout: ['sommeil du bébé', 'sommeil de l’enfant de 0 à 6 ans', 'hygiène de sommeil', 'réveils nocturnes', 'siestes', 'endormissement', 'post-partum et sommeil du parent'],
+      sameAs: [site.instagram],
     })} />
   </Fragment>
 

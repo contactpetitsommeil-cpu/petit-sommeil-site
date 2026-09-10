@@ -5,7 +5,8 @@ import CTABand from '../../components/CTABand.astro';
 import Button from '../../components/Button.astro';
 import { site } from '../../data/site';
 import Photo from '../../components/Photo.astro';
-import { articles } from '../../data/photos';
+import { articles, photos } from '../../data/photos';
+import { getImage } from 'astro:assets';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -21,15 +22,22 @@ const jour = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', y
 const iso = post.data.date.toISOString().slice(0, 10);
 const sommaire = headings.filter((h) => h.depth === 2);
 
+/* Image de l'article pour le schéma (même master que la photo de couverture, en JPEG 1200) : les assistants IA et
+   Google Discover lisent `image`. Auteur et éditeur portent un @id : la même personne et la même entreprise que sur
+   l'accueil et À propos, pour que les moteurs relient les trois pages à une seule entité (audit de lancement, 10/09/2026). */
+const cover = articles[post.id] ? await getImage({ src: photos[articles[post.id]].crops.carte, format: 'jpeg', width: 1200, quality: 80 }) : null;
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: post.data.title,
   description: post.data.description,
+  inLanguage: 'fr-FR',
   datePublished: iso,
+  dateModified: iso,
   articleSection: post.data.category,
-  author: { '@type': 'Person', name: site.owner, jobTitle: site.role },
-  publisher: { '@type': 'Organization', name: site.name, url: site.url },
+  ...(cover ? { image: new URL(cover.src, site.url).href } : {}),
+  author: { '@type': 'Person', '@id': `${site.url}/a-propos#sarah`, name: site.owner, jobTitle: site.role, url: `${site.url}/a-propos` },
+  publisher: { '@type': 'Organization', '@id': `${site.url}/#petit-sommeil`, name: site.name, url: site.url, logo: { '@type': 'ImageObject', url: `${site.url}/images/logo-rond-navy.svg` } },
   mainEntityOfPage: `${site.url}/blog/${post.id}`,
 };
 ---
@@ -49,6 +57,7 @@ const schema = {
         <p class="meta">
           <time datetime={iso}>{jour}</time>
           <span>{lecture} de lecture</span>
+          <span class="auteur">Par {site.owner}, conseillère en hygiène de sommeil</span>
         </p>
         {articles[post.id] && (
           <figure class="cover"><Photo id={articles[post.id]} desktop="carte" widths={[760, 1200]} sizes="(max-width: 800px) calc(100vw - 40px), 760px" /></figure>
@@ -92,6 +101,7 @@ const schema = {
   .chapo { color: var(--text-strong); margin: 0 0 16px; max-width: 60ch; }
   .meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: var(--fs-sm); color: var(--text-body); margin: 0; }
   .meta time + span::before { content: '·'; margin-right: 14px; color: var(--ink-300); }
+  .meta .auteur { flex-basis: 100%; } /* la signature sur sa propre ligne, pas de séparateur orphelin en début de ligne sur mobile */
 
   .body { padding-block: 40px var(--section-y); } /* padding-inline : celui du .container */
   .toc { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 26px; margin-bottom: 36px; }
