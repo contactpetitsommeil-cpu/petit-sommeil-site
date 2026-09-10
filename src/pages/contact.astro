@@ -78,6 +78,7 @@ const sujets = [
             </label>
           </div>
 
+          <p class="hint" data-hint role="status" aria-live="polite"></p>
           <Button type="submit" variant="primary" fullWidth>Envoyer mon message</Button>
           <p class="reassure">Sans engagement · Réponse sous 48h</p>
         </form>
@@ -129,6 +130,8 @@ const sujets = [
   .fld label { font-weight: var(--fw-bold); color: var(--text-strong); font-size: 15px; }
   .req { color: var(--gold-700); margin-left: 3px; }
   .fld-hint { font-size: var(--fs-xs); color: var(--text-muted); }
+  .hint { min-height: 1.4em; margin: 0 0 var(--s-2); font-size: var(--fs-sm); color: var(--error); }
+  .hint:empty { margin: 0; min-height: 0; }
 
   input[type="text"], input[type="email"], textarea, select {
     width: 100%; padding: 13px 15px; min-height: 50px;
@@ -187,3 +190,26 @@ const sujets = [
   @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
   @media (max-width: 520px) { .two { grid-template-columns: 1fr; } .form-card { padding: 24px; } }
 </style>
+
+<script>
+  /* Validation douce, à la première personne, sans le mot « erreur » (même modèle que le planning).
+     Le formulaire est en novalidate : sans ce script, un envoi vide partirait chez Netlify. */
+  const form = document.querySelector<HTMLFormElement>('form[name="contact"]');
+  if (form) {
+    const hint = form.querySelector<HTMLElement>('[data-hint]')!;
+    const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    form.addEventListener('submit', (e) => {
+      const v = (n: string) => (form.elements.namedItem(n) as HTMLInputElement).value.trim();
+      const ok = (form.elements.namedItem('consentement') as HTMLInputElement).checked;
+      let msg = '';
+      if (!v('prenom')) msg = 'Il me faut ton prénom pour te répondre.';
+      else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('email'))) msg = 'Il me faut une adresse email valide pour te répondre.';
+      else if (!v('message')) msg = 'Dis-moi en deux lignes ce qui t’amène, et je te réponds.';
+      else if (!ok) msg = 'J’ai besoin de ton accord pour garder ton message.';
+      if (msg) { e.preventDefault(); hint.textContent = msg; return; }
+      hint.textContent = '';
+      btn.disabled = true; btn.setAttribute('aria-disabled', 'true'); btn.textContent = 'Envoi en cours…';
+    });
+    form.addEventListener('input', () => { hint.textContent = ''; });
+  }
+</script>

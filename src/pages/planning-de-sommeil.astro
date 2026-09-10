@@ -207,6 +207,8 @@ const legende = [
       else if (!ok) msg = 'J’ai besoin de ton accord pour garder ton adresse.';
       if (msg) { e.preventDefault(); hint.textContent = msg; return; }
       hint.textContent = '';
+      const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.setAttribute('aria-disabled', 'true'); btn.textContent = 'Envoi en cours…'; }
       // Le prénom sert à personnaliser la page suivante. Jamais dans l'URL, et effacé juste après.
       try { sessionStorage.setItem('ps_planning_prenom', prenom); } catch {}
     });
