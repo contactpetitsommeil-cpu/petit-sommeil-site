@@ -48,7 +48,7 @@ export const mentionsLegales: LegalDoc = {
       'En cas de doute sur la santé de ton enfant, parles-en à ton médecin ou à ton pédiatre.',
     ] },
     { h: 'Propriété intellectuelle', body: [
-      'Les textes, illustrations, logo et mise en page de ce site appartiennent à Petit Sommeil, sauf mention contraire. Toute reproduction sans accord écrit est interdite.',
+      'Le logo, la charte graphique et l’ensemble des contenus de ce site (textes, illustrations, mise en page) sont protégés par le droit d’auteur et restent la propriété de Petit Sommeil, sauf mention contraire. Toute reproduction, totale ou partielle, notamment à des fins commerciales, est interdite sans autorisation écrite préalable.',
     ] },
     { h: 'Responsabilité', body: [
       'Les informations du site sont données à titre indicatif. Petit Sommeil fait de son mieux pour qu’elles soient exactes, sans pouvoir garantir l’absence d’erreur ni l’usage qui en est fait.',
