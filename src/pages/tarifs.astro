@@ -6,12 +6,9 @@ import Button from '../components/Button.astro';
 import FaqItem from '../components/FaqItem.astro';
 import CTABand from '../components/CTABand.astro';
 import IconCircle from '../components/IconCircle.astro';
-import { plans, pricingNote, LAUNCH_END_ISO, launchIsLive } from '../data/pricing';
+import { plans, pricingNote } from '../data/pricing';
 import { faqShort } from '../data/faq';
 import { icons } from '../data/icons';
-
-/** Bandeau et prix barrés au moment du build. Le script inline en bas de page prend le relais côté navigateur. */
-const showLaunch = launchIsLive();
 
 const parcours = [
   { icon: 'book', title: 'Questionnaire et planning', text: 'Après ta demande, tu reçois le questionnaire et le planning de sommeil sur 7 jours à remplir avant le rendez-vous.' },
@@ -21,7 +18,7 @@ const parcours = [
 ---
 <Base
   title="Tarifs, consultation sommeil bébé et enfant"
-  description="Consultation dès 65 €, offre de lancement jusqu’au 30 septembre 2026. Contact quotidien durant l’accompagnement, en visio ou à domicile près de Saint-Malo."
+  description="Consultation dès 65 €, accompagnement 15 jours à 180 €. Contact quotidien durant l’accompagnement, en visio ou à domicile près de Saint-Malo."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -39,17 +36,6 @@ const parcours = [
     intro="Une consultation ponctuelle ou un accompagnement quotidien pendant 15 jours ou un mois. Tu choisis ce qui te correspond, tout commence par le questionnaire."
   />
 
-  {showLaunch && (
-    <aside class="launch container" data-launch aria-labelledby="launch-title">
-      <div class="launch-inner">
-        <span class="launch-badge">Tarifs de lancement</span>
-        <p id="launch-title" class="launch-text">
-          Pour toute prise de rendez-vous <strong>jusqu’au 30&nbsp;septembre 2026</strong>. Le tarif s’applique aussi aux séances qui se tiennent en octobre.
-        </p>
-      </div>
-    </aside>
-  )}
-
   <section class="section">
     <div class="container">
       <div class="plans">
@@ -58,16 +44,7 @@ const parcours = [
             {p.featured && <span class="badge">Le plus choisi</span>}
             <h2>{p.name}</h2>
             <p class="unit">{p.unit}</p>
-            <p class="price">
-              {p.priceLaunch && showLaunch ? (
-                <>
-                  <span class="price-launch" data-launch-price>{p.priceLaunch}</span>
-                  <span class="price-old" data-full-price aria-label={`prix hors lancement, ${p.price}`}>{p.price}</span>
-                </>
-              ) : (
-                <span data-full-price>{p.price}</span>
-              )}
-            </p>
+            <p class="price">{p.price}</p>
             <p class="desc">{p.desc}</p>
             <ul>
               {p.features.map((f) => <li><Fragment set:html={icons.check} />{f}</li>)}
@@ -140,43 +117,9 @@ const parcours = [
     title="Une formule en tête ?"
     text="Tout commence par le questionnaire. Je te réponds sous 48h."
   />
-
-  <!-- Retire le bandeau et les prix de lancement dès le 1er octobre, même sans redéploiement. -->
-  <script is:inline define:vars={{ LAUNCH_END_ISO }}>
-    (function () {
-      const now = new Date();
-      if (now < new Date(LAUNCH_END_ISO)) return;
-      document.querySelectorAll('[data-launch]').forEach((el) => el.remove());
-      document.querySelectorAll('[data-launch-price]').forEach((el) => el.remove());
-      document.querySelectorAll('[data-full-price]').forEach((el) => {
-        el.classList.remove('price-old');
-        el.removeAttribute('aria-label');
-        el.classList.add('price-current');
-      });
-    })();
-  </script>
 </Base>
 
 <style>
-  /* Bandeau de lancement */
-  .launch { padding-top: 24px; }
-  .launch-inner {
-    display: flex; align-items: center; gap: 20px;
-    background: var(--surface-inset); border: 1px solid var(--border-strong);
-    border-radius: var(--radius-lg); padding: 18px 24px;
-  }
-  .launch-badge {
-    flex-shrink: 0;
-    font-size: 11px; font-weight: var(--fw-extrabold); letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--navy-900); background: var(--gold-400);
-    padding: 6px 12px; border-radius: var(--radius-pill);
-  }
-  .launch-text { margin: 0; font-size: var(--fs-sm); color: var(--text-body); }
-  .launch-text strong { color: var(--text-strong); font-weight: var(--fw-bold); }
-  @media (max-width: 620px) {
-    .launch-inner { flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 18px; }
-  }
-
   /* Cartes tarifaires */
   .plans { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
   .plan {
@@ -203,15 +146,8 @@ const parcours = [
   .price {
     font-family: var(--font-display); font-size: 44px; font-weight: var(--fw-bold);
     color: var(--text-strong); margin: 14px 0 4px; line-height: 1;
-    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
   }
   .featured .price { color: var(--gold-400); }
-  .price-launch { color: inherit; }
-  .price-old {
-    font-family: var(--font-sans); font-size: 15px; font-weight: var(--fw-semibold);
-    color: var(--text-muted); text-decoration: line-through; text-decoration-thickness: 1px;
-  }
-  .featured .price-old { color: var(--text-on-dark-muted); }
 
   .desc { margin: 0 0 14px; }
   ul { list-style: none; margin: 0 0 26px; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: var(--fs-sm); }

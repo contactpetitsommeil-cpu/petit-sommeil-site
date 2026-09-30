@@ -8,7 +8,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { site } from '../data/site';
 import { services } from '../data/services';
-import { plans, launchIsLive } from '../data/pricing';
+import { plans } from '../data/pricing';
 
 export const entete = () => `# ${site.name}
 
@@ -25,7 +25,7 @@ Tagline : « ${site.tagline} » · Signature : « Doucement, pas à pas, vers de
 - Comment : 1) questionnaire en ligne, 2) planning de sommeil sur 7 jours rempli par les parents, 3) échange de 1h30 en visio ou à domicile, 4) plan d'action écrit sous 48h, 5) contact quotidien (hors dimanche) si un accompagnement est choisi.
 - Ce qu'elle ne fait pas : pas de méthode de pleurs contrôlés, pas de diagnostic médical (elle oriente vers pédiatre, médecin, ostéopathe ou consultante en lactation), pas de comparaison entre enfants, pas de promesse de « nuits complètes ». Accompagnement jusqu'à 6 ans.
 - Tranches d'âge : ${services.map((s) => `${s.title} (${s.age.toLowerCase()})`).join(' · ')}.
-- Tarifs : ${plans.map((p) => `${p.name} ${p.price}${launchIsLive() && p.priceLaunch ? ` (${p.priceLaunch} jusqu'au 30/09/2026)` : ''}`).join(' · ')}. Règlement le jour de la consultation (virement, espèces, chèque).
+- Tarifs : ${plans.map((p) => `${p.name} ${p.price}`).join(' · ')}. Règlement le jour de la consultation (virement, espèces, chèque).
 - Délais : réponse sous 48h, rendez-vous en général sous deux semaines, sans engagement. Report sans frais si prévenue 48h avant.
 - Horaires : consultations du lundi au vendredi, 9h à 12h et 13h30 à 17h. Pendant un accompagnement, joignable de 9h à 21h (jours fériés 9h à 12h), dimanche non.
 `;

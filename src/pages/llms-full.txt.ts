@@ -6,14 +6,13 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { site } from '../data/site';
 import { services, parcours, pillars } from '../data/services';
-import { plans, pricingNote, launchIsLive } from '../data/pricing';
+import { plans, pricingNote } from '../data/pricing';
 import { faq } from '../data/faq';
 import { entete } from './llms.txt';
 
 export const GET: APIRoute = async () => {
   const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
   const jour = (x: Date) => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(x);
-  const lancement = launchIsLive();
 
   const blocs: string[] = [entete()];
 
@@ -33,7 +32,7 @@ ${services.map((s) => `### ${s.title} : ${s.age}\n\n${s.description}\n\n${s.poin
 
   blocs.push(`## Tarifs (${site.url}/tarifs)
 
-${plans.map((p) => `### ${p.name}, ${p.price}${lancement && p.priceLaunch ? ` (prix de lancement ${p.priceLaunch} pour toute prise de rendez-vous jusqu'au 30 septembre 2026)` : ''}\n\n${p.unit}. ${p.desc}\n\n${p.features.map((f) => `- ${f}`).join('\n')}`).join('\n\n')}
+${plans.map((p) => `### ${p.name}, ${p.price}\n\n${p.unit}. ${p.desc}\n\n${p.features.map((f) => `- ${f}`).join('\n')}`).join('\n\n')}
 
 ${pricingNote} Sans engagement, réponse sous 48h.
 `);
