@@ -177,6 +177,8 @@ const render = (f: F) => f.type === 'tiles';
 </style>
 
 <script>
+  import { monthsFromDate } from '../scripts/age';
+
   const form = document.querySelector<HTMLFormElement>('[data-form]');
   if (form) {
     const KEY = 'ps_questionnaire';
@@ -226,16 +228,7 @@ const render = (f: F) => f.type === 'tiles';
     const bracket = () => value('tranche');
     const childName = () => (field('childName') as HTMLInputElement | null)?.value.trim() || '';
 
-    /* --- calcul âge en mois révolus, à partir de la date de naissance -- */
-    function monthsFromDate(iso: string): number | null {
-      if (!iso) return null;
-      const d = new Date(iso);
-      if (isNaN(d.getTime())) return null;
-      const now = new Date();
-      let months = (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
-      if (now.getDate() < d.getDate()) months -= 1;
-      return months;
-    }
+    /* --- âge en mois révolus : src/scripts/age.ts, partagé avec la page de remerciement -- */
     function bracketFromMonths(m: number): string | null {
       const found = BRACKETS.find((b) => m >= b.minMonths && m < b.maxMonths);
       return found ? found.value : null;
@@ -286,12 +279,35 @@ const render = (f: F) => f.type === 'tiles';
       if (step === 5) {
         const p = field('parentName') as HTMLInputElement | null;
         const e = field('email') as HTMLInputElement | null;
+        const tel = field('phone') as HTMLInputElement | null;
         const c = field('consent') as HTMLInputElement | null;
         if (!p?.value.trim()) return 'Il me faut ton prénom pour te répondre.';
-        if (!e || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e.value)) return 'Il me faut une adresse email valide pour te répondre.';
+        if (!e || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e.value)) return 'Il me faut une adresse email valide pour te répondre.';
+        // Téléphone obligatoire depuis la commande 13 : au moins 10 chiffres, espaces, points et « + » ignorés.
+        if (!tel || tel.value.replace(/[\s.+]/g, '').replace(/\D/g, '').length < 10) return 'Il me faut ton numéro : c’est sur WhatsApp qu’on se verra.';
         if (!c?.checked) return 'J’ai besoin de ton accord pour te recontacter.';
       }
       return null;
+    }
+    /** Le champ à montrer quand l'étape bloque : le premier qui manque, dans l'ordre des questions. */
+    function problemField(step: number): HTMLElement | null {
+      const names = step === 1 ? ['childName', 'birthDate', 'tranche', 'concerns'] : step === 4 ? ['describe'] : step === 5 ? ['parentName', 'email', 'phone', 'consent'] : [];
+      for (const n of names) {
+        const el = field(n);
+        if (!el) continue;
+        const t = (el as HTMLInputElement).type;
+        const ok = t === 'radio' || t === 'checkbox' ? !!form.querySelector(`[name="${CSS.escape(n)}"]:checked`)
+          : n === 'email' ? /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value)
+          : n === 'phone' ? el.value.replace(/\D/g, '').length >= 10
+          : !!el.value.trim();
+        if (!ok) return el;
+      }
+      return null;
+    }
+    /** Quand on tente d'avancer alors que l'étape bloque : le message, puis le focus sur le champ. */
+    function blockAndFocus() {
+      refresh();
+      problemField(current)?.focus();
     }
 
     /* --- prénom injecté dans les titres et les libellés --------------- */
@@ -425,8 +441,16 @@ const render = (f: F) => f.type === 'tiles';
       return lignes.join('\n');
     }
 
+    // Entrée dans un champ texte : on avance si l'étape est complète, sinon le message et le focus sur ce qui manque.
+    form.addEventListener('keydown', (e) => {
+      const t = e.target as HTMLElement;
+      if (e.key !== 'Enter' || t.tagName !== 'INPUT') return;
+      e.preventDefault();
+      if (problem(current)) { blockAndFocus(); return; }
+      if (current < 5) show(current + 1); else form.requestSubmit(send);
+    });
     form.addEventListener('submit', (e) => {
-      if (problem(5)) { e.preventDefault(); refresh(); return; }
+      if (problem(5)) { e.preventDefault(); blockAndFocus(); return; }
       recap.value = buildRecap();
       subject.value = `Questionnaire : ${childName() || 'un enfant'}, ${LABELS[bracket()] || 'tranche non précisée'}`;
       save();

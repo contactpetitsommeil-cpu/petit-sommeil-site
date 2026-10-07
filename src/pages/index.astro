@@ -29,17 +29,17 @@ const okList = [
 ---
 <Base
   title="Conseillère en sommeil bébé, Saint-Malo"
-  description="Sarah, conseillère en hygiène de sommeil de 0 à 6 ans à Saint-Malo. Un échange, un plan d’action construit avec toi. Sans méthode, sans culpabilité."
+  description="Sarah, conseillère en hygiène de sommeil de 0 à 6 ans à Saint-Malo. Un plan d’accompagnement construit avec toi. Sans méthode, sans culpabilité."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org', '@type': 'ProfessionalService', '@id': `${site.url}/#petit-sommeil`, name: site.name, url: site.url, email: site.email,
-      description: 'Conseillère en hygiène de sommeil pour les enfants de 0 à 6 ans, à Saint-Malo et alentours. En visio ou à domicile.',
+      description: 'Conseillère en hygiène de sommeil pour les enfants de 0 à 6 ans, à Saint-Malo. Consultations en visio sur WhatsApp, partout en France.',
       image: `${site.url}/images/og-default.jpg`, logo: `${site.url}/images/logo-rond-navy.svg`,
       founder: { '@type': 'Person', '@id': `${site.url}/a-propos#sarah`, name: site.owner, jobTitle: site.role, url: `${site.url}/a-propos` },
-      /* Commune du siège (mentions légales), sans la rue : Sarah consulte en visio et se déplace, elle ne reçoit pas. */
+      /* Commune du siège (mentions légales), sans la rue : Sarah consulte uniquement en visio depuis le 07/10/2026, elle ne reçoit pas. */
       address: { '@type': 'PostalAddress', addressLocality: 'Le Vivier-sur-Mer', postalCode: '35960', addressRegion: 'Bretagne', addressCountry: 'FR' },
-      areaServed: ['Saint-Malo', 'Dinard', 'Dol-de-Bretagne', 'Cancale', 'Saint-Méloir-des-Ondes', 'Plerguer', 'Miniac', 'Le Tronchet', 'Beaussais-sur-Mer', 'France (visio)'],
+      areaServed: { '@type': 'Country', name: 'France' },
       priceRange: '40 € à 280 €',
       knowsAbout: ['sommeil du bébé', 'sommeil de l’enfant de 0 à 6 ans', 'hygiène de sommeil', 'réveils nocturnes', 'siestes', 'endormissement', 'post-partum et sommeil du parent'],
       sameAs: [site.instagram],
@@ -51,7 +51,7 @@ const okList = [
     <div class="hero-text">
       <p class="eyebrow hero-eyebrow"><span class="hero-emoji" aria-hidden="true">🌙</span> Petit Sommeil</p>
       <h1><span class="tag-line1">{site.taglineLine1}</span><br /><span class="tag-line2">{site.taglineLine2}</span></h1>
-      <p class="lead sub">Conseillère en hygiène de sommeil pour les enfants de 0 à 6 ans, à Saint-Malo et alentours. En visio ou chez toi.</p>
+      <p class="lead sub">Conseillère en hygiène de sommeil pour les enfants de 0 à 6 ans, à Saint-Malo. En visio sur WhatsApp, partout en France.</p>
       <div class="ctas">
         <Button href="/questionnaire" variant="gold" size="lg">
           <Fragment slot="icon" set:html={icons.calendar} />
@@ -90,7 +90,7 @@ const okList = [
         <h2 id="fais">Un plan construit avec toi, pas pour toi</h2>
       </div>
       <div class="two-body">
-        <p>J’analyse le sommeil de ton enfant, son rythme, ses nuits, ses journées. Puis on construit ensemble un plan d’action qui tient dans votre vie, pas dans un manuel.</p>
+        <p>J’analyse le sommeil de ton enfant, son rythme, ses nuits, ses journées. Puis on construit ensemble un plan d’accompagnement qui tient dans votre vie, pas dans un manuel.</p>
         <p>Tu connais ton enfant mieux que moi. Mon rôle est de t’outiller, jamais de décider à ta place.</p>
       </div>
     </div>

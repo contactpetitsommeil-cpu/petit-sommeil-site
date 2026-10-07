@@ -76,9 +76,9 @@ export const services: Service[] = [
 export const parcours = [
   { icon: 'book', title: 'Tu remplis le questionnaire', text: 'Cinq minutes, des questions adaptées à l’âge de ton enfant. Je te réponds sous 48h.' },
   { icon: 'calendar', title: 'Tu tiens le planning de sommeil', text: 'Sept jours, une feuille, un stylo. C’est lui qui me permet de comprendre les nuits de ton enfant avant qu’on se parle.' },
-  { icon: 'video', title: 'On échange', text: '1h30 en visio ou chez toi. Un échange simple, constructif et libre, sur le sommeil de ton enfant et sur ce que tu traverses. Ton enfant n’a pas besoin d’être là.' },
-  { icon: 'moon', title: 'Tu reçois ton plan d’action', text: 'Sous 48h maximum, par écrit. Ce qui t’amène, des repères sur le sommeil à l’âge de ton enfant, et un tableau qui reprend ce qu’on a décidé ensemble.' },
-  { icon: 'heart', title: 'On reste en contact', text: 'Si tu as choisi un accompagnement : chaque jour, sauf le dimanche, pendant 15 jours ou un mois. Je t’accompagne, je te soutiens, je t’écoute.' },
+  { icon: 'video', title: 'On échange', text: '1h30 en visio, sur WhatsApp. Un échange simple, constructif et libre, sur le sommeil de ton enfant et sur ce que tu traverses. Ton enfant n’a pas besoin d’être là.' },
+  { icon: 'moon', title: 'Tu reçois ton plan d’accompagnement', text: 'Sous 48h maximum, par écrit. Ce qui t’amène, des repères sur le sommeil à l’âge de ton enfant, et un tableau qui reprend ce qu’on a décidé ensemble.' },
+  { icon: 'heart', title: 'On reste en contact', text: 'Si tu as choisi un accompagnement, on échange chaque jour, sauf le dimanche, pendant 15 jours ou un mois. Et une fois par semaine, on se voit 30 min en visio. Je t’accompagne, je te soutiens, je t’écoute.' },
 ] as const;
 
 export const pillars = [

@@ -12,7 +12,7 @@ import { site } from './site';
 export interface LegalSection { h: string; body: (string | string[])[] }
 export interface LegalDoc { eyebrow: string; title: string; updated: string; intro: string; sections: LegalSection[] }
 
-const UPDATED = 'septembre 2026';
+const UPDATED = 'octobre 2026';
 
 export const mentionsLegales: LegalDoc = {
   eyebrow: 'Informations légales',
@@ -78,7 +78,7 @@ export const confidentialite: LegalDoc = {
         'Le prénom et la date de naissance de ton enfant, sa tranche d’âge.',
         'Des réponses sur ses journées et ses nuits : repas, siestes, coucher, réveils.',
         'Ce que tu traverses, ce que tu as déjà essayé, ton objectif.',
-        'Ton prénom, ton email, et ton téléphone si tu le laisses.',
+        'Ton prénom, ton email et ton numéro de téléphone, pour la visio sur WhatsApp.',
       ],
       'Aucune donnée de santé détaillée n’est collectée en ligne. Une seule question, libre et facultative, te demande s’il y a quelque chose sur la santé de ton enfant que je devrais savoir. Tu peux la laisser vide. Le reste se dit en consultation, de vive voix.',
     ] },
@@ -87,6 +87,7 @@ export const confidentialite: LegalDoc = {
     ] },
     { h: 'Où ça part', body: [
       'Les formulaires sont traités par Netlify, l’hébergeur du site, qui me les transmet par email. Netlify est une société américaine : les données peuvent transiter par des serveurs situés hors de l’Union européenne. Netlify est certifiée au cadre de protection des données UE-États-Unis (Data Privacy Framework) et applique les clauses contractuelles types de la Commission européenne, les deux garanties prévues par le RGPD pour ce type de transfert.',
+      'Les visios et les échanges pendant un accompagnement passent par WhatsApp (WhatsApp Ireland Limited, groupe Meta). Les appels et les messages y sont chiffrés de bout en bout. WhatsApp traite ton numéro et des données d’utilisation selon sa propre politique de confidentialité.',
       'Tes données ne sont jamais vendues ni transmises à des tiers pour de la publicité.',
       'Les réponses du questionnaire sont aussi enregistrées dans ton navigateur, sur ton appareil, pour que tu puisses t’arrêter et reprendre. Elles sont effacées après l’envoi.',
     ] },
@@ -117,7 +118,7 @@ export const cgv: LegalDoc = {
       'Ces conditions s’appliquent aux consultations et accompagnements en hygiène de sommeil de l’enfant proposés par Petit Sommeil (Sarah Höhn, entrepreneur individuel, SIRET 914 319 710 00028, 19 chemin des Cancales, 35960 Le Vivier-sur-Mer) à toute personne majeure. Prendre rendez-vous, c’est les accepter.',
     ] },
     { h: 'Article 2. Prestations', body: [
-      'Petit Sommeil propose une consultation unique, une consultation de suivi pour les familles déjà accompagnées, et deux accompagnements de 15 jours ou d’un mois qui ajoutent un contact quotidien, hors dimanche. Le détail et les prix sont sur la page Tarifs. Le prix applicable est celui affiché le jour de la prise de rendez-vous.',
+      'Petit Sommeil propose une consultation unique, une consultation de suivi pour les familles déjà accompagnées, et deux accompagnements de 15 jours ou d’un mois qui ajoutent un contact quotidien, hors dimanche, et une visio de 30 minutes par semaine. Toutes les consultations se font en visio, sur WhatsApp. Le détail et les prix sont sur la page Tarifs. Le prix applicable est celui affiché le jour de la prise de rendez-vous.',
       'Ces prestations sont pédagogiques et de conseil. Elles ne remplacent pas un avis médical.',
     ] },
     { h: 'Article 3. Réservation', body: [
@@ -126,31 +127,28 @@ export const cgv: LegalDoc = {
     { h: 'Article 4. Prix et paiement', body: [
       'Les prix sont en euros, TVA non applicable (article 293 B du CGI). Le règlement se fait le jour de la consultation, par virement, espèces ou chèque.',
     ] },
-    { h: 'Article 5. Déplacement à domicile', body: [
-      'Les consultations à domicile sont possibles autour de Saint-Malo. Au-delà de 20 km, un forfait déplacement de 1 € par kilomètre supplémentaire s’ajoute au prix de la consultation. Il est annoncé avant la prise de rendez-vous.',
+    { h: 'Article 5. Ce que tu reçois', body: [
+      'Après chaque consultation, Sarah envoie un plan d’accompagnement écrit, sous 48h maximum. Il reprend ce qui t’amène, des repères sur le sommeil à l’âge de ton enfant, et un tableau de ce qui a été décidé ensemble.',
+      'Pendant un accompagnement, le contact est quotidien, sauf le dimanche, par SMS ou WhatsApp, de 9h à 21h en semaine et de 9h à 12h les jours fériés. S’y ajoute une visio de 30 minutes par semaine, sur WhatsApp.',
     ] },
-    { h: 'Article 6. Ce que tu reçois', body: [
-      'Après chaque consultation, Sarah envoie un plan d’action écrit, sous 48h maximum. Il reprend ce qui t’amène, des repères sur le sommeil à l’âge de ton enfant, et un tableau de ce qui a été décidé ensemble.',
-      'Pendant un accompagnement, le contact est quotidien, sauf le dimanche, par SMS ou visio, de 9h à 21h en semaine et de 9h à 12h les jours fériés.',
+    { h: 'Article 6. Résultats', body: [
+      'Sarah s’engage à faire de son mieux, pas à un résultat. C’est le parent qui met le plan d’accompagnement en place au quotidien, et le plan peut devoir être repris si le quotidien change. Un enfant est un être vivant à part entière, avec ses besoins et ses envies : personne ne peut garantir des nuits parfaites, et Petit Sommeil ne le fera pas.',
     ] },
-    { h: 'Article 7. Résultats', body: [
-      'Sarah s’engage à faire de son mieux, pas à un résultat. C’est le parent qui met le plan d’action en place au quotidien, et le plan peut devoir être repris si le quotidien change. Un enfant est un être vivant à part entière, avec ses besoins et ses envies : personne ne peut garantir des nuits parfaites, et Petit Sommeil ne le fera pas.',
-    ] },
-    { h: 'Article 8. Annulation et report', body: [
+    { h: 'Article 7. Annulation et report', body: [
       'Préviens 48h avant le rendez-vous et on reporte, sans frais. Si c’est plus tard, écris quand même : on regarde ensemble, au cas par cas, rien n’est automatique.',
       'Si c’est Sarah qui a un empêchement, la séance est reportée ou remboursée, à ton choix.',
     ] },
-    { h: 'Article 9. Droit de rétractation', body: [
+    { h: 'Article 8. Droit de rétractation', body: [
       'Tu disposes d’un délai de 14 jours pour te rétracter, conformément au Code de la consommation. Si la consultation a lieu avant la fin de ce délai, à ta demande, tu renonces à ce droit pour la prestation réalisée.',
     ] },
-    { h: 'Article 10. Assurance', body: [
+    { h: 'Article 9. Assurance', body: [
       'Sarah Höhn, entrepreneur individuel (SIRET 914 319 710 00028, 19 chemin des Cancales, 35960 Le Vivier-sur-Mer), exerçant sous le nom Petit Sommeil, est couverte par une assurance responsabilité civile professionnelle souscrite auprès de Hiscox SA, Hiscox France, 38 avenue de l’Opéra, 75002 Paris, par l’intermédiaire d’Orus France SAS (courtier, ORIAS 26000343), contrat n° RCPH278639259. Couverture géographique : monde entier, hors États-Unis et Canada.',
     ] },
-    { h: 'Article 11. Données personnelles', body: [
+    { h: 'Article 10. Données personnelles', body: [
       'Les données collectées sont traitées selon la politique de confidentialité, accessible depuis le pied de page.',
     ] },
     // Médiateur : adhésion de Sarah à SMP confirmée le 10/09/2026 (Florent), coordonnées ci-dessous inchangées.
-    { h: 'Article 12. Litiges', body: [
+    { h: 'Article 11. Litiges', body: [
       'Ces conditions relèvent du droit français. En cas de désaccord, on cherche d’abord une solution ensemble. Sinon, tu peux saisir gratuitement le médiateur de la consommation dont je relève : Société de la Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, www.mediateur-consommation-smp.fr, ou par le formulaire de son site. Les tribunaux français restent compétents.',
     ] },
   ],

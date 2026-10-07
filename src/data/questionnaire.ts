@@ -2,13 +2,14 @@
  * Questionnaire Petit Sommeil, v3, cinq tranches.
  * Source unique des champs. Reproduit `docs/questionnaire.md` v3.
  * Aucun champ ne s'ajoute ni ne se retire sans décision écrite dans `docs/decisions.md`.
+ * 07/10/2026 (commande 13, décision du 07/10) : question `format` retirée, `phone` obligatoire (visio sur WhatsApp).
  * `{prenom}` est remplacé par le prénom de l'enfant côté îlot JS ; sans JS, par « ton enfant ».
  * `showFor` accepte un identifiant de tranche ou plusieurs séparés par des virgules (ex. 'b3,b4').
  */
 
 export type Option = string | { label: string; value?: string; showFor?: string };
 
-interface Base { key: string; label: string; hint?: string }
+interface Base { key: string; label: string; hint?: string; required?: boolean }
 export type Field =
   | (Base & { type: 'tiles'; options: Option[]; cols: number; multi?: boolean })
   | (Base & { type: 'text' | 'email' | 'tel' | 'date'; placeholder?: string })
@@ -185,15 +186,14 @@ export const step4: Field[] = [
   { key: 'health', type: 'textarea', label: 'Y a-t-il quelque chose sur la santé de ton enfant que je devrais savoir ?',
     hint: 'Facultatif. On en reparlera surtout en consultation.', rows: 2,
     placeholder: 'Ex : reflux, allergie, né avant terme…' },
-  { key: 'format', type: 'tiles', label: 'Quel format préfères-tu ?', cols: 3, options: ['Visio', 'À domicile', 'Peu importe'] },
 ];
 
 /* ---------------------------------------------------------------- Étape 5 */
 
 export const step5: Field[] = [
   { key: 'parentName', type: 'text', label: 'Ton prénom', placeholder: 'Julie' },
-  { key: 'email', type: 'email', label: 'Email', placeholder: 'toi@exemple.fr' },
-  { key: 'phone', type: 'tel', label: 'Téléphone', hint: 'Facultatif', placeholder: '06 12 34 56 78' },
+  { key: 'email', type: 'email', label: 'Email', placeholder: 'toi@exemple.fr', required: true },
+  { key: 'phone', type: 'tel', label: 'Téléphone', hint: 'Pour la visio sur WhatsApp', placeholder: '06 12 34 56 78', required: true },
   { key: 'source', type: 'select', label: 'Comment m’as-tu connue ?',
     options: ['Choisir…', 'Instagram', 'Recommandation', 'Recherche Google', 'Salon de la parentalité', 'Autre'] },
   { key: 'consent', type: 'consent', href: '/politique-confidentialite',

@@ -34,6 +34,7 @@ const shown = field.label.replace('{prenom}', 'ton enfant');
     )}
     {(field.type === 'text' || field.type === 'email' || field.type === 'tel' || field.type === 'date') && (
       <input type={field.type} id={id} name={field.key} placeholder={field.placeholder} aria-describedby={hintId}
+        required={field.required || undefined} aria-required={field.required ? 'true' : undefined}
         max={field.type === 'date' ? new Date().toISOString().slice(0, 10) : undefined}
         autocomplete={field.key === 'email' ? 'email' : field.key === 'phone' ? 'tel' : field.key === 'parentName' ? 'given-name' : field.key === 'birthDate' ? 'bday' : 'off'} />
     )}

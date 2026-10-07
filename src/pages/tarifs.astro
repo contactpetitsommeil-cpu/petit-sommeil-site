@@ -12,13 +12,13 @@ import { icons } from '../data/icons';
 
 const parcours = [
   { icon: 'book', title: 'Questionnaire et planning', text: 'Après ta demande, tu reçois le questionnaire et le planning de sommeil sur 7 jours à remplir avant le rendez-vous.' },
-  { icon: 'video', title: 'La consultation', text: 'On se voit en visio ou à domicile, 1h30. Bilan, écoute, plan d’action construit avec toi.' },
-  { icon: 'moon', title: 'Le plan d’action', text: 'Tu reçois ton plan écrit sous 48h maximum : problématique, repères d’âge, et le tableau de ce qu’on a décidé ensemble.' },
+  { icon: 'video', title: 'La consultation', text: 'On se voit en visio sur WhatsApp, 1h30. Bilan, écoute, plan d’accompagnement construit avec toi.' },
+  { icon: 'moon', title: 'Le plan d’accompagnement', text: 'Tu reçois ton plan écrit sous 48h maximum : problématique, repères d’âge, et le tableau de ce qu’on a décidé ensemble.' },
 ] as const;
 ---
 <Base
   title="Tarifs, consultation sommeil bébé et enfant"
-  description="Consultation dès 65 €, accompagnement 15 jours à 180 €. Contact quotidien durant l’accompagnement, en visio ou à domicile près de Saint-Malo."
+  description="Consultation dès 65 €, accompagnement 15 jours à 180 €. Tout se fait en visio sur WhatsApp, avec un contact quotidien pendant l’accompagnement."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -42,9 +42,12 @@ const parcours = [
         {plans.map((p) => (
           <article class:list={['plan', p.featured && 'featured on-dark']} id={p.id}>
             {p.featured && <span class="badge">Le plus choisi</span>}
+            {!p.featured && p.tag && <span class="badge tag">{p.tag}</span>}
             <h2>{p.name}</h2>
             <p class="unit">{p.unit}</p>
-            <p class="price">{p.price}</p>
+            <p class="price">
+              {p.price}
+            </p>
             <p class="desc">{p.desc}</p>
             <ul>
               {p.features.map((f) => <li><Fragment set:html={icons.check} />{f}</li>)}
@@ -79,14 +82,13 @@ const parcours = [
     </div>
   </section>
 
-  <!-- Déplacement et horaires -->
+  <!-- Visio et horaires -->
   <section class="section pratique">
     <div class="container grid-2">
       <div class="card">
         <p class="eyebrow">Où on se voit</p>
-        <h2>Visio partout, domicile autour de Saint-Malo</h2>
-        <p>Les consultations se font en visio partout en France, et en présentiel autour de Saint-Malo : Dinard, Dol-de-Bretagne, Cancale, Saint-Méloir-des-Ondes, Plerguer, Miniac et Le Tronchet.</p>
-        <p>Au-delà de 20&nbsp;km de Saint-Malo, un forfait déplacement s’ajoute&nbsp;: <strong>1&nbsp;€ par kilomètre supplémentaire</strong>. Une manière de dire oui aux familles un peu plus loin, sans faire monter le prix pour tout le monde.</p>
+        <h2>En visio, sur WhatsApp</h2>
+        <p>Toutes mes consultations se font en visio, sur WhatsApp, partout en France. Ton téléphone suffit, et ton enfant n’a pas besoin d’être là.</p>
       </div>
       <div class="card">
         <p class="eyebrow">Horaires</p>
@@ -117,6 +119,7 @@ const parcours = [
     title="Une formule en tête ?"
     text="Tout commence par le questionnaire. Je te réponds sous 48h."
   />
+
 </Base>
 
 <style>
@@ -138,6 +141,11 @@ const parcours = [
     font-size: 11px; font-weight: var(--fw-extrabold); letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--navy-900); background: var(--gold-400);
     padding: 6px 12px; border-radius: var(--radius-pill);
+  }
+  /* Pastille discrète (« Nouvelle famille ») : même gabarit, même place, jamais d’or en texte sur crème. */
+  .badge.tag {
+    color: var(--text-strong); background: var(--surface-inset);
+    border: 1px solid var(--border-strong); padding: 5px 11px;
   }
   h2 { font-size: 22px; margin: 0; line-height: 1.25; }
   .unit { font-size: var(--fs-sm); color: var(--text-muted); margin: 0; }
@@ -177,7 +185,7 @@ const parcours = [
   .parcours p { margin: 0; font-size: var(--fs-sm); color: var(--text-body); }
   .parcours-note { max-width: 780px; margin: 28px auto 0; text-align: center; color: var(--text-body); }
 
-  /* Déplacement + horaires */
+  /* Visio et horaires */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .card {
     background: var(--surface-card); border: 1px solid var(--border);
@@ -205,7 +213,7 @@ const parcours = [
     .grid-2 { grid-template-columns: 1fr; }
   }
   @media (max-width: 640px) {
-    .plans { grid-template-columns: 1fr; }
+    .plans { grid-template-columns: 1fr; gap: 32px; } /* de l’air pour la pastille sous la carte mise en avant */
     .featured { grid-row: auto; order: -1; }
   }
 </style>

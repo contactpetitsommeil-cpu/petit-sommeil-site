@@ -14,11 +14,11 @@ export const faq: FaqGroup[] = [
     items: [
       {
         q: 'Comment se passe une consultation unique ?',
-        a: 'Tu remplis le questionnaire et le planning de sommeil. J’analyse le sommeil de ton enfant, puis on élabore ensemble un plan d’action qui suit tes besoins à toi. Et si tu le souhaites, on parle aussi de ce que ces nuits provoquent chez toi, et dans vos relations.',
+        a: 'Tu remplis le questionnaire et le planning de sommeil. J’analyse le sommeil de ton enfant, puis on élabore ensemble un plan d’accompagnement qui suit tes besoins à toi. Et si tu le souhaites, on parle aussi de ce que ces nuits provoquent chez toi, et dans vos relations.',
       },
       {
         q: 'Comment se passe un accompagnement de 15 jours ou d’un mois ?',
-        a: 'On commence comme une consultation unique. Ensuite, on reste en contact tous les jours, sauf le dimanche, pendant toute la durée choisie. Chaque jour, tu me dis où vous en êtes : je t’accompagne dans ce que tu mets en place, je te soutiens et je t’écoute.',
+        a: 'On commence comme une consultation unique. Ensuite, on reste en contact tous les jours, sauf le dimanche, pendant toute la durée choisie, et on se voit 30 min en visio chaque semaine. Chaque jour, tu me dis où vous en êtes : je t’accompagne dans ce que tu mets en place, je te soutiens et je t’écoute.',
       },
       {
         q: 'Mon enfant doit être présent ?',
@@ -26,7 +26,7 @@ export const faq: FaqGroup[] = [
       },
       {
         q: 'Qu’est-ce que je reçois après la consultation ?',
-        a: 'Un plan d’action écrit, sous 48h maximum. Tu y retrouves ce qui t’amène, des repères sur le sommeil à l’âge de ton enfant, et un tableau qui reprend ce qu’on a décidé ensemble.',
+        a: 'Un plan d’accompagnement écrit, sous 48h maximum. Tu y retrouves ce qui t’amène, des repères sur le sommeil à l’âge de ton enfant, et un tableau qui reprend ce qu’on a décidé ensemble.',
       },
     ],
   },
@@ -65,8 +65,8 @@ export const faq: FaqGroup[] = [
         a: 'Préviens-moi 48h avant et on reporte, sans frais. Si c’est plus tard, écris-moi quand même : on regarde ensemble, il n’y a rien d’automatique.',
       },
       {
-        q: 'Les consultations se font en visio ou en présentiel ?',
-        a: 'Les deux. La visio convient à la grande majorité des familles, partout en France. Le présentiel est possible à Saint-Malo, Dinard, Dol-de-Bretagne, Cancale, Saint-Méloir-des-Ondes, Plerguer, Miniac et Le Tronchet. Au-delà de 20 km, un forfait de 1 € par kilomètre s’ajoute.',
+        q: 'Les consultations se font en visio ?',
+        a: 'Oui, toutes. On se voit sur WhatsApp, en appel vidéo, depuis ton téléphone, où que tu habites en France.',
       },
     ],
   },

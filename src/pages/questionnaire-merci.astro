@@ -1,10 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
+import PlanningFiles from '../components/PlanningFiles.astro';
+
+/* Page de remerciement du questionnaire. Depuis la commande 13 (07/10/2026), elle porte aussi
+   le planning à télécharger : le HTML livre les deux versions, l'îlot ne garde que celle qui
+   correspond à l'âge de l'enfant (lu dans localStorage, jamais dans l'URL). Noindex. */
 ---
 <Base
   title="Merci, ton questionnaire m’est bien parvenu"
-  description="Ton questionnaire a bien été transmis à Sarah. Réponse par email sous 48h pour fixer ta consultation."
+  description="Ton questionnaire a bien été transmis à Sarah. Réponse par email sous 48h pour fixer ta consultation en visio sur WhatsApp."
   noindex
 >
   <section class="merci">
@@ -15,8 +20,16 @@ import Button from '../components/Button.astro';
 
       <h1 data-merci-title>Merci&nbsp;!</h1>
       <p class="lead" data-merci-text>
-        Ton questionnaire m’a bien été transmis. Je l’étudie avec attention et je reviens vers toi <strong>sous 48h</strong> par email pour fixer ta consultation.
+        Ton questionnaire m’a bien été transmis. Je l’étudie avec attention et je reviens vers toi <strong>sous 48h</strong> par email pour fixer ta consultation en visio sur WhatsApp.
       </p>
+
+      <div class="planning">
+        <h2>Ton planning de sommeil</h2>
+        <p class="planning-intro">Télécharge-le ici, imprime-le et remplis-le pendant sept jours avant notre rendez-vous.</p>
+        <p class="planning-choose" data-planning-choose>Choisis la version qui correspond à son âge.</p>
+        <PlanningFiles />
+        <p class="planning-how"><a href="/planning-de-sommeil#comment-le-remplir">Voici le mode d’emploi pour le remplir</a></p>
+      </div>
 
       <div class="actions">
         <Button href="/" variant="primary">Retour à l’accueil</Button>
@@ -37,33 +50,71 @@ import Button from '../components/Button.astro';
   }
   .mark svg { width: 34px; height: 34px; }
   h1 { margin-bottom: 14px; }
-  .lead { color: var(--text-body); margin-bottom: 32px; }
+  .lead { color: var(--text-body); margin-bottom: 40px; }
   .lead :global(strong) { color: var(--text-strong); font-weight: var(--fw-bold); }
+
+  /* Le planning : un bloc à part, titré en h2 réduit (un seul h1 sur la page). */
+  .planning { margin: 0 0 40px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .planning h2 { font-size: var(--fs-h3); margin: 0 0 10px; }
+  .planning-intro { color: var(--text-body); margin: 0 0 20px; }
+  .planning-choose { font-size: var(--fs-sm); color: var(--text-muted); margin: -8px 0 14px; }
+  .planning-choose[hidden] { display: none; }
+  .planning-how { margin: 18px 0 0; font-size: var(--fs-sm); }
+  .planning-how a { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; font-weight: var(--fw-semibold); }
+  .planning-how a:hover { color: var(--gold-600); }
+  .planning-how a:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; border-radius: var(--radius-sm); }
+
   .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .sig { margin: 28px 0 0; font-family: var(--font-display); font-style: italic; color: var(--ink-500); }
   @media (max-width: 480px) { .actions { flex-direction: column; } }
 </style>
 
 <script>
-  /* Prénoms lus dans localStorage, jamais dans l’URL. Effacement juste après. */
+  import { monthsFromDate } from '../scripts/age';
+
+  /* Prénoms et âge lus dans localStorage, jamais dans l'URL. Effacement juste après. */
   const KEY = 'ps_questionnaire';
+  /** Version du planning selon l'âge en mois : 0 à 23 mois → 0-2 ans, 24 à 71 mois → 2-6 ans (même seuil que la tranche b3). */
+  const versionFromMonths = (m: number): '0-2' | '2-6' | null => (m >= 0 && m < 24 ? '0-2' : m >= 24 && m < 72 ? '2-6' : null);
+  /** Secours sans date exploitable : la tranche cochée. */
+  const versionFromBracket = (b: string): '0-2' | '2-6' | null =>
+    ['b0', 'b1', 'b2'].includes(b) ? '0-2' : ['b3', 'b4'].includes(b) ? '2-6' : null;
+
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const d = JSON.parse(raw) as Record<string, string | string[]>;
-      const parent = typeof d.parentName === 'string' ? d.parentName.trim() : '';
-      const child = typeof d.childName === 'string' ? d.childName.trim() : '';
-      const format = typeof d.format === 'string' ? d.format : '';
+      const parent = typeof d.parentName === 'string' ? d.parentName.trim() : '';
+      const child = typeof d.childName === 'string' ? d.childName.trim() : '';
+      const birthDate = typeof d.birthDate === 'string' ? d.birthDate : '';
+      const tranche = typeof d.tranche === 'string' ? d.tranche : '';
 
       const h1 = document.querySelector<HTMLElement>('[data-merci-title]');
-      if (h1 && parent) h1.textContent = `Merci ${parent} !`;
+      if (h1 && parent) h1.textContent = `Merci ${parent} !`;
 
       const p = document.querySelector<HTMLElement>('[data-merci-text]');
-      if (p) {
-        const pour = child ? ` pour <strong>${child}</strong>` : '';
-        const ou = format === 'Visio' ? ' en visio' : format === 'À domicile' ? ' à domicile' : '';
-        p.innerHTML = `Ton questionnaire${pour} m’a bien été transmis. Je l’étudie avec attention et je reviens vers toi <strong>sous 48h</strong> par email pour fixer ta consultation${ou}.`;
+      if (p && child) {
+        const strong48 = document.createElement('strong');
+        strong48.textContent = 'sous 48h';
+        const strongChild = document.createElement('strong');
+        strongChild.textContent = child;
+        p.replaceChildren(
+          'Ton questionnaire pour ', strongChild,
+          ' m’a bien été transmis. Je l’étudie avec attention et je reviens vers toi ', strong48,
+          ' par email pour fixer ta consultation en visio sur WhatsApp.',
+        );
       }
+
+      const months = monthsFromDate(birthDate);
+      const version = months !== null ? versionFromMonths(months) : versionFromBracket(tranche);
+      if (version) {
+        document.querySelectorAll<HTMLElement>('[data-planning]').forEach((card) => {
+          card.hidden = card.dataset.planning !== version;
+        });
+        const choose = document.querySelector<HTMLElement>('[data-planning-choose]');
+        if (choose) choose.hidden = true;
+      }
+
       localStorage.removeItem(KEY);
     }
   } catch {}

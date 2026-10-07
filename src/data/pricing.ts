@@ -9,6 +9,8 @@ export interface Plan {
   cta: string;
   href: string;
   variant: 'primary' | 'secondary' | 'gold';
+  /** Pastille discrète sur une carte non mise en avant (commande 13, 07/10/2026). */
+  tag?: string;
 }
 
 export const plans: Plan[] = [
@@ -16,12 +18,13 @@ export const plans: Plan[] = [
     id: 'consultation',
     name: 'Consultation unique',
     price: '65 €',
-    unit: '1h30, visio ou à domicile',
+    unit: '1h30, en visio sur WhatsApp',
+    tag: 'Nouvelle famille',
     desc: 'Le rendez-vous complet pour comprendre et poser les premiers repères.',
     features: [
       'Questionnaire et planning de sommeil remplis avant',
       'Bilan complet et écoute pendant l’échange',
-      'Plan d’action écrit, envoyé sous 48h',
+      'Plan d’accompagnement écrit, envoyé sous 48h',
     ],
     cta: 'Démarrer le questionnaire',
     href: '/questionnaire',
@@ -36,7 +39,7 @@ export const plans: Plan[] = [
     features: [
       'Réservé aux familles déjà accompagnées',
       'Point de situation et ajustements',
-      'Plan d’action mis à jour, envoyé sous 48h',
+      'Plan d’accompagnement mis à jour, envoyé sous 48h',
     ],
     cta: 'Prendre un suivi',
     href: '/contact',
@@ -51,9 +54,9 @@ export const plans: Plan[] = [
     desc: 'La consultation complète, puis on se parle chaque jour, du lundi au samedi.',
     features: [
       'Tout ce qui est prévu dans la consultation unique',
-      'Contact quotidien par SMS ou visio, hors dimanche',
+      'Contact quotidien par SMS ou WhatsApp, hors dimanche',
       'Joignable de 9h à 21h pendant la durée choisie',
-      'Le sommeil de ton enfant, et ta place à toi dans tout ça',
+      'Une visio de 30 min par semaine',
     ],
     cta: 'Démarrer le questionnaire',
     href: '/questionnaire',
@@ -67,9 +70,9 @@ export const plans: Plan[] = [
     desc: 'Le même rythme, sur un mois entier, pour laisser au plan le temps de s’installer.',
     features: [
       'Tout ce qui est prévu dans la consultation unique',
-      'Contact quotidien par SMS ou visio, hors dimanche',
+      'Contact quotidien par SMS ou WhatsApp, hors dimanche',
       'Joignable de 9h à 21h pendant la durée choisie',
-      'Le temps d’ajuster le plan au fil des semaines',
+      'Une visio de 30 min par semaine',
     ],
     cta: 'Démarrer le questionnaire',
     href: '/questionnaire',
@@ -79,4 +82,3 @@ export const plans: Plan[] = [
 
 export const pricingNote =
   'Règlement le jour de la consultation, par virement, espèces ou chèque.';
-

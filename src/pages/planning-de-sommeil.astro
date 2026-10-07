@@ -96,7 +96,7 @@ const legende = [
           <p class="preview-cap">A4 paysage, deux versions : <strong>0 à 2 ans</strong> et <strong>2 à 6 ans</strong>. S’imprime en noir et blanc.</p>
         </div>
 
-        <div class="card how">
+        <div class="card how" id="comment-le-remplir">
           <p class="k">Comment le remplir</p>
           <ul class="legende">
             {legende.map((l) => (
@@ -165,7 +165,7 @@ const legende = [
   .photo { margin: 0; overflow: hidden; aspect-ratio: 3 / 2; }
   .photo :global(picture), .photo :global(img) { width: 100%; height: 100%; }
   .photo :global(img) { object-fit: cover; object-position: 50% 45%; }
-  .how { padding: 22px; }
+  .how { padding: 22px; scroll-margin-top: 90px; } /* même marge que .offer sur Accompagnements : le titre reste sous l’en-tête */
   .k { font-size: 12.5px; font-weight: var(--fw-extrabold); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-body); margin: 0 0 12px; }
   .legende { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .legende li { display: grid; grid-template-columns: 18px auto 1fr; gap: 10px; align-items: center; font-size: var(--fs-sm); }
